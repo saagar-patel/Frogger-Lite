@@ -1,0 +1,4 @@
+#ifndef FROGGER_V2_FROG_H
+#define FROGGER_V2_FROG_H
+
+#endif //FROGGER_V2_FROG_H
