@@ -49,9 +49,11 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND SOURCE_FILES src/Frog.cpp)
+list(APPEND SOURCE_FILES src/Frog.cpp
+                         src/frogger_app.cpp
+                         src/level.cpp)
 
-list(APPEND TEST_FILES )
+list(APPEND TEST_FILES tests/test_main.cpp)
 
 ci_make_app(
         APP_NAME        frogger-main
