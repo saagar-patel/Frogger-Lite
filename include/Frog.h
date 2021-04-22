@@ -8,10 +8,10 @@ class Frog {
   public:
     explicit Frog(const vec2& position, const int& lives);
     
-    void MoveUp() const;
-    void MoveRight() const;
-    void MoveLeft() const;
-    void MoveDown() const;
+    void MoveUp();
+    void MoveRight();
+    void MoveLeft();
+    void MoveDown();
 
     const vec2 &GetPosition() const;
 
@@ -19,7 +19,7 @@ class Frog {
 
 private:
     vec2 position_;
-    float kMoveDistance = 50;
+    float kMoveDistance = 10;
     int lives_;
 };
 }

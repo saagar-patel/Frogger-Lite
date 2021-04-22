@@ -7,11 +7,20 @@ FroggerApp::FroggerApp() : level_(Level(3)){
     level_;
 }
 
+void FroggerApp::setup() {
+  auto img = ci::loadImage((loadAsset("../assets/background-complete.png")));
+  background = ci::gl::Texture2d::create(img);
+}
+
 void FroggerApp::draw() {
-    ci::Color background_color("black");
-    ci::gl::clear(background_color);
-    
-    level_.Display();
+  ci::Color bg_color("white");
+  ci::gl::clear(bg_color);
+
+  ci::gl::color(ci::Color("white"));
+  ci::gl::draw(background, ci::Rectf(vec2(0,0), vec2(kWindowSizeX, kWindowSizeY)));
+
+  ci::gl::color(ci::Color("seagreen"));
+  level_.Display();
 }
 
 void FroggerApp::update() {
@@ -21,23 +30,41 @@ void FroggerApp::update() {
 void FroggerApp::keyDown(ci::app::KeyEvent event) {
     switch (event.getCode()) {
         case ci::app::KeyEvent::KEY_w:
-            level_.GetPlayer().MoveUp();
-            ci::gl::drawStringCentered("Pressed W", vec2(1000, 1000), ci::Color("pink"));
+            level_.isMovingForward = true;
             break;
 
         case ci::app::KeyEvent::KEY_a:
-            level_.GetPlayer().MoveLeft();
+            level_.isMovingLeft = true;
             break;
 
         case ci::app::KeyEvent::KEY_s:
-            level_.GetPlayer().MoveDown();
+            level_.isMovingDown = true;
             break;
 
         case ci::app::KeyEvent::KEY_d:
-            level_.GetPlayer().MoveRight();
+            level_.isMovingRight = true;
             break;
     }
 }
 
+void FroggerApp::keyUp(ci::app::KeyEvent event) {
+  switch (event.getCode()) {
+    case ci::app::KeyEvent::KEY_w:
+      level_.isMovingForward = false;
+      break;
+
+    case ci::app::KeyEvent::KEY_a:
+      level_.isMovingLeft = false;
+      break;
+
+    case ci::app::KeyEvent::KEY_s:
+      level_.isMovingDown = false;
+      break;
+
+    case ci::app::KeyEvent::KEY_d:
+      level_.isMovingRight = false;
+      break;
+  }
+}
 }
 

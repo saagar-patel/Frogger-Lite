@@ -9,20 +9,20 @@ Frog::Frog(const vec2& position, const int& lives) {
   lives_ = lives;
 }
 
-    void Frog::MoveUp() const {
-      position_ + vec2(0, kMoveDistance);
+    void Frog::MoveUp() {
+      position_.y = position_.y - kMoveDistance;
     }
     
-    void Frog::MoveRight() const {
-      position_ + vec2(kMoveDistance, 0);
+    void Frog::MoveRight() {
+      position_.x = position_.x + kMoveDistance;
     }
     
-    void Frog::MoveLeft() const{
-      position_.x - vec2(kMoveDistance, 0);
+    void Frog::MoveLeft() {
+      position_.x = position_.x - kMoveDistance;
     }
     
-    void Frog::MoveDown() const {
-      position_.y - vec2(0, kMoveDistance);
+    void Frog::MoveDown() {
+      position_.y = position_.y + kMoveDistance;
     }
 
     const vec2 &Frog::GetPosition() const {

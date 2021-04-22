@@ -10,9 +10,13 @@ class FroggerApp : public ci::app::App {
     public:
       FroggerApp();
       
+      void setup() override;
       void draw() override;
       void update() override;
       void keyDown(ci::app::KeyEvent event) override;
+      void keyUp(ci::app::KeyEvent event) override;
+      
+      ci::gl::Texture2dRef background;
       
     private:
       Level level_;

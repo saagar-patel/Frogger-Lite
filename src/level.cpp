@@ -11,14 +11,11 @@ namespace frogger {
   }
 
   void Level::Display() const {
-    ci::gl::color(ci::Color("white"));
-    ci::gl::drawSolidCircle(player_.GetPosition(), 25);
-    
-    ci::gl::drawStringCentered(std::to_string(player_.GetPosition().x), vec2(500, 500), ci::Color("white"));
+    ci::gl::drawSolidCircle(player_.GetPosition(), 30);
   }
 
   void Level::AdvanceOneFrame() {
-
+    MovePlayer();
   }
 
   Frog Level::CreateFrogPlayer(const vec2 &position, int lives) {
@@ -26,9 +23,22 @@ namespace frogger {
     return frog;
   }
 
-  const Frog &Level::GetPlayer() const {
+  Frog Level::GetPlayer() {
     return player_;
   }
 
+  void Level::MovePlayer() {
+    if (isMovingForward) {
+      player_.MoveUp();
+    } else if (isMovingDown) {
+      player_.MoveDown();
+    }
+    if (isMovingRight) {
+      player_.MoveRight();
+    } else if (isMovingLeft) {
+      player_.MoveLeft();
+    }
+  }
+  
 }
 
