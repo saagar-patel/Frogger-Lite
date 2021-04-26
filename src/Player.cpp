@@ -26,6 +26,10 @@ void Player::MoveDown() {
   position_.y = position_.y + kMoveDistance;
 }
 
+void Player::DrawPlayer() const {
+  ci::gl::drawSolidCircle(position_, radius_);
+}
+
 const vec2 &Player::GetPosition() const {
   return position_;
 }

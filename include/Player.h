@@ -15,6 +15,8 @@ class Player {
     void MoveLeft();
     void MoveDown();
 
+    void DrawPlayer() const;
+    
     const vec2 &GetPosition() const;
 
     void SetPosition(const vec2& vec);

@@ -22,8 +22,6 @@ class Level {
     
     static Player CreatePlayer(const vec2& position, int lives, float radius);
     
-    
-    
     Player GetPlayer();
     
     void MovePlayer();
@@ -36,8 +34,6 @@ class Level {
     float kTopWall = 0;
     float kBottomWall = 2000;
     Player player_;
-    
-    void DrawPlayer() const;
     
     void ExecuteWallCollision();
     

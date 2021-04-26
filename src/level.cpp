@@ -8,7 +8,7 @@ Level::Level(int lives) : player_(CreatePlayer(kSpawnPoint, lives, kDefaultRadiu
 }
 
 void Level::Display() const {
-  DrawPlayer();
+  player_.DrawPlayer();
 }
 
 void Level::AdvanceOneFrame() {
@@ -54,10 +54,6 @@ void Level::ExecuteWallCollision() {
 void Level::ResetPlayerPosition() {
     player_.SetPosition(kSpawnPoint);
     player_.SetLives(player_.GetLives() - 1);
-}
-
-void Level::DrawPlayer() const{
-  ci::gl::drawSolidCircle(player_.GetPosition(), player_.GetRadius());
 }
 
 }
