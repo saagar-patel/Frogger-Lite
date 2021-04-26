@@ -1,10 +1,10 @@
 #include "frogger_app.h"
 #include "level.h"
+
 namespace frogger {
     
-FroggerApp::FroggerApp() : level_(Level(3)){
+FroggerApp::FroggerApp() : level_(Level(kNumLives)){
     ci::app::setWindowSize(kWindowSizeX, kWindowSizeY);
-    level_;
 }
 
 void FroggerApp::setup() {
@@ -19,7 +19,7 @@ void FroggerApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::draw(background, ci::Rectf(vec2(0,0), vec2(kWindowSizeX, kWindowSizeY)));
 
-  ci::gl::color(ci::Color("seagreen"));
+  ci::gl::color(ci::Color("pink"));
   level_.Display();
 }
 
@@ -29,28 +29,28 @@ void FroggerApp::update() {
 
 void FroggerApp::keyDown(ci::app::KeyEvent event) {
     switch (event.getCode()) {
-        case ci::app::KeyEvent::KEY_w:
-            level_.isMovingForward = true;
-            break;
+      case ci::app::KeyEvent::KEY_w:
+        level_.isMovingUp = true;
+        break;
 
-        case ci::app::KeyEvent::KEY_a:
-            level_.isMovingLeft = true;
-            break;
+      case ci::app::KeyEvent::KEY_a:
+        level_.isMovingLeft = true;
+        break;
 
-        case ci::app::KeyEvent::KEY_s:
-            level_.isMovingDown = true;
-            break;
+      case ci::app::KeyEvent::KEY_s:
+        level_.isMovingDown = true;
+        break;
 
-        case ci::app::KeyEvent::KEY_d:
-            level_.isMovingRight = true;
-            break;
+      case ci::app::KeyEvent::KEY_d:
+        level_.isMovingRight = true;
+        break;
     }
 }
 
 void FroggerApp::keyUp(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_w:
-      level_.isMovingForward = false;
+      level_.isMovingUp = false;
       break;
 
     case ci::app::KeyEvent::KEY_a:

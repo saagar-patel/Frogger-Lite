@@ -1,12 +1,14 @@
+#pragma once
+
 #include "cinder/gl/gl.h"
 
 namespace frogger {
 
 using glm::vec2;
 
-class Frog {
+class Player {
   public:
-    explicit Frog(const vec2& position, const int& lives);
+    Player(const vec2& position, const int& lives, float radius);
     
     void MoveUp();
     void MoveRight();
@@ -15,11 +17,18 @@ class Frog {
 
     const vec2 &GetPosition() const;
 
-    void SetPosition(const vec2 &position);
+    void SetPosition(const vec2& vec);
+
+    float GetRadius() const;
+
+    int GetLives() const;
+
+    void SetLives(int lives);
 
 private:
-    vec2 position_;
     float kMoveDistance = 10;
+    float radius_;
+    vec2 position_;
     int lives_;
 };
 }

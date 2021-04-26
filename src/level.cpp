@@ -1,44 +1,64 @@
 #include "level.h"
 
-#include <utility>
-#include "cinder/Rand.h"
-#include "ctime"
-#include "random"
 namespace frogger {
-  Level::Level(int lives) : player_(CreateFrogPlayer(kSpawnPoint, lives)) {
-    player_;
-    player_.SetPosition(kSpawnPoint);
-  }
+    
+Level::Level(int lives) : player_(CreatePlayer(kSpawnPoint, lives, kDefaultRadius)) {
+  player_;
+  player_.SetPosition(kSpawnPoint);
+}
 
-  void Level::Display() const {
-    ci::gl::drawSolidCircle(player_.GetPosition(), 30);
-  }
+void Level::Display() const {
+  DrawPlayer();
+}
 
-  void Level::AdvanceOneFrame() {
-    MovePlayer();
-  }
+void Level::AdvanceOneFrame() {
+  MovePlayer();
+  ExecuteWallCollision();
+}
 
-  Frog Level::CreateFrogPlayer(const vec2 &position, int lives) {
-    Frog frog = Frog(position, lives);
-    return frog;
-  }
+Player Level::CreatePlayer(const vec2 &position, int lives, float radius) {
+  Player frog = Player(position, lives, radius);
+  return frog;
+}
 
-  Frog Level::GetPlayer() {
-    return player_;
-  }
+Player Level::GetPlayer() {
+  return player_;
+}
 
-  void Level::MovePlayer() {
-    if (isMovingForward) {
-      player_.MoveUp();
-    } else if (isMovingDown) {
-      player_.MoveDown();
-    }
-    if (isMovingRight) {
+void Level::MovePlayer() {
+  if (isMovingUp) {
+    player_.MoveUp();
+  } else if (isMovingLeft || isMovingRight) {
+    if (isMovingRight && !isMovingLeft) {
       player_.MoveRight();
-    } else if (isMovingLeft) {
+    }
+    if (isMovingLeft && !isMovingRight) {
       player_.MoveLeft();
     }
+  } else if (isMovingDown) {
+    player_.MoveDown();
   }
   
+}
+  
+void Level::ExecuteWallCollision() {
+  if (player_.GetPosition().x + player_.GetRadius() >= kRightWall ||
+  player_.GetPosition().x - player_.GetRadius() <= kLeftWall) {
+    ResetPlayerPosition();
+  } else if (player_.GetPosition().y + player_.GetRadius() >= kBottomWall ||
+             player_.GetPosition().y - player_.GetRadius() <= kTopWall){
+    ResetPlayerPosition();
+  }
+}
+
+void Level::ResetPlayerPosition() {
+    player_.SetPosition(kSpawnPoint);
+    player_.SetLives(player_.GetLives() - 1);
+}
+
+void Level::DrawPlayer() const{
+  ci::gl::drawSolidCircle(player_.GetPosition(), player_.GetRadius());
+}
+
 }
 

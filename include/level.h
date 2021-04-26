@@ -1,32 +1,46 @@
 #pragma once
 
 #include "cinder/gl/gl.h"
-#include "Frog.h"
+#include "Player.h"
 
 using glm::vec2;
 
 namespace frogger {
 class Level {
-    public:
-      Level(int lives);
-      
-      void Display() const;
-      
-      void AdvanceOneFrame();
-      
-      static Frog CreateFrogPlayer(const vec2& position, int lives);
+  public:
+    bool isMovingUp = false;
+    bool isMovingDown = false;
+    bool isMovingRight = false;
+    bool isMovingLeft = false;
+    
+    
+    explicit Level(int lives);
+    
+    void Display() const;
+    
+    void AdvanceOneFrame();
+    
+    static Player CreatePlayer(const vec2& position, int lives, float radius);
+    
+    
+    
+    Player GetPlayer();
+    
+    void MovePlayer();
 
-      Frog GetPlayer();
-      
-      void MovePlayer();
-      
-      bool isMovingForward = false;
-      bool isMovingLeft = false;
-      bool isMovingRight = false;
-      bool isMovingDown = false;
-      
-private:
-      Frog player_;
-      vec2 kSpawnPoint = vec2(1200, 1950);
+  private:
+    vec2 kSpawnPoint = vec2(1200, 1950);
+    float kDefaultRadius = 30;
+    float kRightWall = 2400;
+    float kLeftWall = 0;
+    float kTopWall = 0;
+    float kBottomWall = 2000;
+    Player player_;
+    
+    void DrawPlayer() const;
+    
+    void ExecuteWallCollision();
+    
+    void ResetPlayerPosition();
 };
 }
