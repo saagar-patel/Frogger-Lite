@@ -4,6 +4,7 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "level.h"
+#include "cinder/Font.h"
 
 namespace frogger {
 class FroggerApp : public ci::app::App {
@@ -24,6 +25,6 @@ class FroggerApp : public ci::app::App {
       Level level_;
       int kWindowSizeX = 2400;
       int kWindowSizeY = 2000;
-
+      int kTopMargin = 150;
 };
 }

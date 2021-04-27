@@ -27,6 +27,7 @@ void Player::MoveDown() {
 }
 
 void Player::DrawPlayer() const {
+  ci::gl::color(ci::Color("pink"));
   ci::gl::drawSolidCircle(position_, radius_);
 }
 

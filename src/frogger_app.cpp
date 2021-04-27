@@ -1,5 +1,6 @@
 #include "frogger_app.h"
 #include "level.h"
+#include "cinder/Font.h"
 
 namespace frogger {
     
@@ -19,6 +20,27 @@ void FroggerApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::draw(background, ci::Rectf(vec2(0,0), vec2(kWindowSizeX, kWindowSizeY)));
 
+  ci::gl::color(ci::Color("black"));
+  ci::gl::drawSolidRect(ci::Rectf(vec2(0, kTopMargin - 8), vec2(kWindowSizeX, kTopMargin)));
+
+  ci::gl::drawStringCentered(
+          "Level: " + std::to_string(level_.level_count_),
+          glm::vec2((kWindowSizeX / 10) * 3, kTopMargin/4),
+          ci::Color("black"),
+          ci::Font("Consolas", 100));
+
+  ci::gl::drawStringCentered(
+          "Score: " + std::to_string(level_.score_),
+          glm::vec2(kWindowSizeX / 10, kTopMargin/4),
+          ci::Color("black"),
+          ci::Font("Consolas", 100));
+
+  ci::gl::drawStringCentered(
+          "Lives: " + std::to_string(level_.GetPlayer().GetLives()),
+          glm::vec2(8 * (kWindowSizeX / 10), kTopMargin/4),
+          ci::Color("black"),
+          ci::Font("Consolas", 100));
+  
   ci::gl::color(ci::Color("pink"));
   level_.Display();
 }
