@@ -21,7 +21,6 @@ class FroggerApp : public ci::app::App {
       ci::gl::Texture2dRef background;
       
     private:
-      int kNumLives = 3;
       Level level_;
       int kWindowSizeX = 2400;
       int kWindowSizeY = 2000;

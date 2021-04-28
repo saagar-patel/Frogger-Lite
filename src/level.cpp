@@ -1,20 +1,28 @@
 #include "level.h"
 #include <chrono>
+#include <cinder/Rand.h>
+#include <Windows.h>
 
 namespace frogger {
 
 using glm::distance;
     
-Level::Level(int lives) : player_(CreatePlayer(kSpawnPoint, lives, kDefaultRadius)) {
+Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)) {
   score_ = 0;
   level_count_ = 0;
   ExecuteLevelCompletion();
-  player_.SetPosition(kSpawnPoint);
+  player_.SetPosition(kPlayerSpawnPoint);
   start_time_ = std::chrono::steady_clock::now();
+  PopulateRoads();
 }
 
 void Level::Display() const {
   DrawLevelObjective(kLevelObjective);
+  for (const Road& road : car_roads_) {
+    for (Car car : road.GetCars()) {
+      car.DrawCar(road.GetCurrentSpawnpoint());
+    }
+  }
   player_.DrawPlayer();
 }
 
@@ -22,6 +30,11 @@ void Level::AdvanceOneFrame() {
   MovePlayer();
   ExecuteWallCollision();
   ExecuteLevelCompletion();
+  for(const Road& road : car_roads_) {
+    for (Car car : road.GetCars()) {
+      car.MoveCar(1);
+    }
+  }
 }
 
 Player Level::CreatePlayer(const vec2 &position, int lives, float radius) {
@@ -51,16 +64,16 @@ void Level::MovePlayer() {
   
 void Level::ExecuteWallCollision() {
   if (player_.GetPosition().x + player_.GetRadius() >= kRightWall ||
-  player_.GetPosition().x - player_.GetRadius() <= kLeftWall) {
+  player_.GetPosition().x - player_.GetRadius() <= kLeftWall || player_.GetPosition().y + player_.GetRadius() >= kBottomWall ) {
     ResetPlayerPosition();
-  } else if (player_.GetPosition().y + player_.GetRadius() >= kBottomWall ||
-             player_.GetPosition().y - player_.GetRadius() <= kTopWall){
-    ResetPlayerPosition();
+    DecreaseLives();
+  } else if (player_.GetPosition().y - player_.GetRadius() <= kTopWall){
+    player_.SetPosition(vec2(player_.GetPosition().x, kTopWall + player_.GetRadius()));
   }
 }
 
 void Level::ResetPlayerPosition() {
-    player_.SetPosition(kSpawnPoint);
+    player_.SetPosition(kPlayerSpawnPoint);
     player_.SetLives(player_.GetLives() - 1);
 }
 
@@ -74,6 +87,7 @@ void Level::DrawLevelObjective(const vec2& level_goal) const {
 void Level::ExecuteLevelCompletion() {
   if (distance(player_.GetPosition(), kLevelObjective) < player_.GetRadius() + kObjectiveRadius) {
     ResetPlayerPosition();
+    player_.SetLives(3);
     level_count_++;
     score_ += static_cast<int>(100 * (1/(0.1 * CountElapsedTime())));
   }
@@ -87,6 +101,14 @@ void Level::ExecuteLevelCompletion() {
   }
 
   void Level::DecreaseLives() {
+    player_.SetLives(player_.GetLives() - 1);
+  }
+  
+  void Level::PopulateRoads() {
+    car_roads_.emplace_back(Road(kR1Spawnpoints, kNumCarsR1, kMinSpeed, kMaxSpeed));
+    car_roads_.emplace_back(Road(kR2Spawnpoints, kNumCarsR2, kMinSpeed, kMaxSpeed));
+    car_roads_.emplace_back(Road(kR3Spawnpoints, kNumCarsR3, kMinSpeed, kMaxSpeed));
+    car_roads_.emplace_back(Road(kR4Spawnpoints, kNumCarsR4, kMinSpeed, kMaxSpeed));
     
   }
 

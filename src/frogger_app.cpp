@@ -4,7 +4,7 @@
 
 namespace frogger {
     
-FroggerApp::FroggerApp() : level_(Level(kNumLives)){
+FroggerApp::FroggerApp() : level_(Level()){
     ci::app::setWindowSize(kWindowSizeX, kWindowSizeY);
 }
 

@@ -3,11 +3,13 @@
 #include "cinder/gl/gl.h"
 #include "Player.h"
 #include "Car_Obstacle.h"
+#include "Road.h"
 
 
 using glm::vec2;
 
 namespace frogger {
+
 class Level {
   public:
     int score_;
@@ -21,7 +23,7 @@ class Level {
     bool isMovingLeft = false;
     
     
-    explicit Level(int lives);
+    explicit Level();
     
     void Display() const;
     
@@ -34,19 +36,27 @@ class Level {
     void MovePlayer();
 
   private:
-    vec2 kSpawnPoint = vec2(1200, 1950);
+    vec2 kPlayerSpawnPoint = vec2(1200, 1950);
     vec2 kLevelObjective = vec2(1200, 200);
+    std::vector<vec2> kR1Spawnpoints = {vec2(-100, 1785), vec2(2400, 1785)};
+    std::vector<vec2> kR2Spawnpoints = {vec2(-100, 1640), vec2(2400, 1640)};
+    std::vector<vec2> kR3Spawnpoints = {vec2(-100, 1500), vec2(2400, 1500)};
+    std::vector<vec2> kR4Spawnpoints = {vec2(-100, 1360), vec2(2400, 1360)};
+    float kMinSpeed = 5;
+    float kMaxSpeed = 15;
+    int kNumCarsR1 = 3;
+    int kNumCarsR2 = 6;
+    int kNumCarsR3 = 4;
+    int kNumCarsR4 = 8;
     float kDefaultRadius = 30;
     float kObjectiveRadius = 20;
     float kRightWall = 2400;
     float kLeftWall = 0;
     float kTopWall = 150;
     float kBottomWall = 2000;
+    int kLives = 3;
     
-    std::vector<Car> road_one_;
-    std::vector<Car> road_two_;
-    std::vector<Car> road_three_;
-    
+    std::vector<Road> car_roads_;
     Player player_;
     
     void ExecuteWallCollision();
@@ -56,11 +66,11 @@ class Level {
     void DrawLevelObjective(const vec2& level_goal) const;
     
     double CountElapsedTime();
-    
-//    void CreateCarObstacles();
 
     void DecreaseLives();
     
     void ResetPlayerPosition();
+    
+    void PopulateRoads();
 };
 }

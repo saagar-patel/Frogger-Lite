@@ -9,15 +9,23 @@ namespace frogger {
     class Car {
       public:
         Car(const vec2& spawnpoint, float speed);
+        
         void DrawCar(const vec2& spawnpoint);
-        void MoveCar(float difficulty_scalar, float speed);
-      private:
+        
+        void MoveCar(float difficulty_scalar);
+
+        const vec2 &GetTopLeftEdge() const;
+
+        const vec2 &GetBotRightEdge() const;
+
+        float GetDirectionCoeff() const;
+
+    private:
         ci::Color kPossibleColors[5] = {"darkgray", "firebrick", "goldenrod", "darkblue", "azure"};
         float kVerticalWidth = 50;
         float kHorizontalWidth = 100;
         float kRightWall = 2400;
         float kLeftWall = 0;
-        
         float move_speed_;
         vec2 top_left_edge_;
         vec2 bot_right_edge_;

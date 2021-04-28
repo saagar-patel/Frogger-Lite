@@ -17,9 +17,9 @@ void Car::DrawCar(const vec2 &spawnpoint) {
   ci::gl::drawSolidRect(ci::Rectf(top_left_edge_, bot_right_edge_));
 }
 
-void Car::MoveCar(float difficulty_scalar, float speed) {
-  top_left_edge_.x += direction_coeff_ * difficulty_scalar * speed;
-  bot_right_edge_.x += direction_coeff_ * difficulty_scalar * speed;
+void Car::MoveCar(float difficulty_scalar) {
+  top_left_edge_.x += (direction_coeff_ * difficulty_scalar) * move_speed_;
+  bot_right_edge_.x += (direction_coeff_ * difficulty_scalar) * move_speed_;
 }
 
 float Car::DetermineDirection(const vec2& spawnpoint) const {
@@ -28,6 +28,18 @@ float Car::DetermineDirection(const vec2& spawnpoint) const {
   } else { //spawn is on left side
     return 1.0f;
   }
+}
+
+const vec2 &Car::GetTopLeftEdge() const {
+  return top_left_edge_;
+}
+
+const vec2 &Car::GetBotRightEdge() const {
+  return bot_right_edge_;
+}
+
+float Car::GetDirectionCoeff() const {
+  return direction_coeff_;
 }
 
 }
