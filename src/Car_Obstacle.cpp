@@ -9,25 +9,24 @@ Car::Car(const vec2& spawnpoint, float speed) {
   top_left_edge_ = vec2(spawnpoint.x - kHorizontalWidth / 2, spawnpoint.y - kVerticalWidth / 2);
   bot_right_edge_ = vec2(spawnpoint.x + kHorizontalWidth / 2, spawnpoint.y + kVerticalWidth / 2);
   move_speed_ = speed;
-  direction_coeff_ = DetermineDirection(spawnpoint);
+  color_ = ci::Color(kPossibleColors[ci::Rand::randUint(8)]);
 }
 
-void Car::DrawCar(const vec2 &spawnpoint) {
-  ci::gl::color(ci::Color(kPossibleColors[ci::Rand::randUint(4)]));
+void Car::DrawCar() {
+  ci::gl::color(color_);
   ci::gl::drawSolidRect(ci::Rectf(top_left_edge_, bot_right_edge_));
 }
 
-void Car::MoveCar(float difficulty_scalar) {
-  top_left_edge_.x += (direction_coeff_ * difficulty_scalar) * move_speed_;
-  bot_right_edge_.x += (direction_coeff_ * difficulty_scalar) * move_speed_;
-}
-
-float Car::DetermineDirection(const vec2& spawnpoint) const {
-  if (kRightWall - spawnpoint.x >= kLeftWall + spawnpoint.x) { // spawn is on right side
-    return -1.0f;
-  } else { //spawn is on left side
-    return 1.0f;
+void Car::MoveCar(float difficulty_scalar, bool direction) {
+  float direction_coeff = 0;
+  if (direction) {
+    direction_coeff = 1.0f;
+  } else {
+    direction_coeff = -1.0f;
   }
+  
+  top_left_edge_.x += (direction_coeff * difficulty_scalar) * move_speed_;
+  bot_right_edge_.x += (direction_coeff * difficulty_scalar) * move_speed_;
 }
 
 const vec2 &Car::GetTopLeftEdge() const {
@@ -38,8 +37,9 @@ const vec2 &Car::GetBotRightEdge() const {
   return bot_right_edge_;
 }
 
-float Car::GetDirectionCoeff() const {
-  return direction_coeff_;
+void Car::PlaceCar(const vec2& point) {
+  top_left_edge_ = vec2(point.x - kHorizontalWidth / 2, point.y - kVerticalWidth / 2);
+  bot_right_edge_ = vec2(point.x + kHorizontalWidth / 2, point.y + kVerticalWidth / 2);
 }
 
 }

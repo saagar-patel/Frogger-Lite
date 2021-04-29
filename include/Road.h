@@ -10,47 +10,40 @@ namespace frogger {
     class Road {
 
     public:
-        Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed);
-        
-        void MoveCarsOnRoad(int score, int level, float road_width);
-        
-        const std::vector<vec2> &GetSpawnpoints() const;
+        Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool direction);
 
-        void SetSpawnpoints(const std::vector<vec2> &spawnpoints);
-
-        const std::vector<Car> &GetCars() const;
-
-        void SetCars(const std::vector<Car> &cars);
-
-        int GetNumCars() const;
-
-        void SetNumCars(int numCars);
-
-        float GetMinSpeed() const;
-
-        void SetMinSpeed(float minSpeed);
-
-        float GetMaxSpeed() const;
-
-        void SetMaxSpeed(float maxSpeed);
+        bool isCarReachedEnd(const Car& car) const;
         
         const vec2 &GetCurrentSpawnpoint() const;
+        
+        const vec2 &GetDestructionPoint() const;
+
+        void SetLeftToRightMovement(bool leftToRightMovement);
+
+        bool isLeftToRightMovement() const;
 
         void SetCurrentSpawnpoint(const vec2 &currentSpawnpoint);
 
+        void SetDestructionPoint(const vec2 &destructionPoint);
+
+        const std::vector<vec2> &GetSpawnpoints() const;
+
+        std::vector<Car> cars_;
+
+        
     private:
         float kDifficultDenom = 2000;
+        float road_width_;
         std::vector<vec2> spawnpoints_;
         vec2 current_spawnpoint_;
         vec2 destruction_point_;
         bool left_to_right_movement_;
-        std::vector<Car> cars_;
         int num_cars_;
         float min_speed_;
         float max_speed_;
 
         void CreateCarObstacles();
-        void DetermineDirection();
-        bool EvaluateCarRelease(Car car, float road_width);
+        
+        
     };
 }
