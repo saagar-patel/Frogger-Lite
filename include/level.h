@@ -16,11 +16,16 @@ class Level {
     unsigned level_count_;
     std::chrono::time_point<std::chrono::steady_clock> start_time_;
     std::chrono::time_point<std::chrono::steady_clock> end_time_;
+    double current_time_;
     
     bool isMovingUp = false;
     bool isMovingDown = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
+    
+    bool can_move = false;
+    
+    bool game_over = false;
     
     explicit Level();
     
@@ -45,7 +50,7 @@ class Level {
     float kMinSpeed = 5;
     float kMaxSpeed = 15;
     float kBaseDifficultyScalar = 0.1f;
-    float kDifficultyDenominator = 4000.0f;
+    float kDifficultyDenominator = 5000.0f;
     int kNumCarsR1 = 6;
     int kNumCarsR2 = 2;
     int kNumCarsR3 = 5;
@@ -67,9 +72,13 @@ class Level {
     
     void ExecuteLevelCompletion();
     
+    void ExecuteCarCollision();
+    
     void DrawLevelObjective(const vec2& level_goal) const;
     
     double CountElapsedTime();
+    
+    void CountCurrentTime();
 
     void DecreaseLives();
     

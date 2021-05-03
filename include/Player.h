@@ -14,7 +14,8 @@ class Player {
     void MoveRight();
     void MoveLeft();
     void MoveDown();
-
+    void StreamMovement(bool l_to_r, float move_speed, float difficulty_scalar);
+    
     void DrawPlayer() const;
     
     const vec2 &GetPosition() const;
@@ -29,6 +30,7 @@ class Player {
 
 private:
     float kMoveDistance = 10;
+    
     float radius_;
     vec2 position_;
     int lives_;

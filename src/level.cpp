@@ -13,6 +13,7 @@ Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)
   ExecuteLevelCompletion();
   player_.SetPosition(kPlayerSpawnPoint);
   start_time_ = std::chrono::steady_clock::now();
+  current_time_ = 0;
   PopulateRoads();
 }
 
@@ -25,11 +26,16 @@ void Level::Display() const {
       car.DrawCar();
     }
   }
-  ci::gl::drawStringCentered(std::to_string(car_roads_[0].isLeftToRightMovement()),
-                             vec2(900, 300),
-                             ci::Color("purple"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(car_roads_[1].isLeftToRightMovement()),
+  if (!can_move && !game_over) {
+    ci::gl::drawStringCentered("Press Spacebar to enable movement.",
+                               vec2(1200, 700),
+                               ci::Color("Black"),
+                               ci::Font("Consolas", 120));
+  }
+  
+  
+  
+  ci::gl::drawStringCentered(std::to_string(ci::Rand::randInt(0, 7)),
                              vec2(900, 400),
                              ci::Color("purple"),
                              ci::Font("Consolas", 100));
@@ -37,9 +43,9 @@ void Level::Display() const {
                              vec2(900, 500),
                              ci::Color("purple"),
                              ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(car_roads_[3].isLeftToRightMovement()),
+  ci::gl::drawStringCentered(std::to_string(can_move),
                              vec2(900, 600),
-                             ci::Color("purple"),
+                             ci::Color("white"),
                              ci::Font("Consolas", 100));
 }
 
@@ -47,12 +53,7 @@ void Level::AdvanceOneFrame() {
   MovePlayer();
   ExecuteWallCollision();
   ExecuteLevelCompletion();
-//  for (Road road : car_roads_) {
-//    for (Car car: road.cars_) {
-//      car.MoveCar(3); //1 + ((static_cast<float>(score_ * level_count_))/2000
-//      road.isCarReachedEnd(car);
-//    }
-//  }
+  ExecuteCarCollision();
   for (size_t i = 0; i < car_roads_.size(); ++i) {
     for (size_t j = 0; j < car_roads_[i].cars_.size(); ++j) {
       car_roads_[i].cars_[j].MoveCar(kBaseDifficultyScalar +
@@ -63,6 +64,7 @@ void Level::AdvanceOneFrame() {
       }
     }
   }
+  CountCurrentTime();
 }
 
 Player Level::CreatePlayer(const vec2 &position, int lives, float radius) {
@@ -94,14 +96,30 @@ void Level::ExecuteWallCollision() {
   if (player_.GetPosition().x + player_.GetRadius() >= kRightWall ||
   player_.GetPosition().x - player_.GetRadius() <= kLeftWall || player_.GetPosition().y + player_.GetRadius() >= kBottomWall ) {
     ResetPlayerPosition();
-    DecreaseLives(); //TODO: Fix bug about more than one life being removed per "death"
+    DecreaseLives();
   } else if (player_.GetPosition().y - player_.GetRadius() <= kTopWall){
     player_.SetPosition(vec2(player_.GetPosition().x, kTopWall + player_.GetRadius()));
   }
 }
 
 void Level::ResetPlayerPosition() {
+  if (player_.GetLives() <= 1) {
+    game_over = true;
+    can_move = false;
+    isMovingRight = false;
+    isMovingLeft = false;
+    isMovingUp = false;
+    isMovingDown = false;
+  } else {
+    can_move = false;
     player_.SetPosition(kPlayerSpawnPoint);
+    isMovingRight = false;
+    isMovingLeft = false;
+    isMovingUp = false;
+    isMovingDown = false;
+    current_time_ = 0.0;
+  }
+  
 }
 
 void Level::DrawLevelObjective(const vec2& level_goal) const {
@@ -154,6 +172,25 @@ void Level::ExecuteLevelCompletion() {
       }
     }
   }
+
+  void Level::ExecuteCarCollision() {
+    for (size_t i = 0; i < car_roads_.size(); ++i) {
+      for (size_t j = 0; j < car_roads_[i].cars_.size(); ++j) {
+        if (player_.GetPosition().x - player_.GetRadius() <= car_roads_[i].cars_[j].GetBotRightEdge().x &&
+            player_.GetPosition().x + player_.GetRadius() >= car_roads_[i].cars_[j].GetTopLeftEdge().x && 
+            player_.GetPosition().y + player_.GetRadius() >= car_roads_[i].cars_[j].GetTopLeftEdge().y &&
+          player_.GetPosition().y - player_.GetRadius() <= car_roads_[i].cars_[j].GetBotRightEdge().y) {
+          ResetPlayerPosition();
+          DecreaseLives();
+        } 
+      }
+    }
+  }
+
+  void Level::CountCurrentTime() {
+    current_time_ =  std::chrono::duration<double>(std::chrono::steady_clock::now() - start_time_).count();
+  }
+
 
 }
 

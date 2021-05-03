@@ -21,9 +21,11 @@ class FroggerApp : public ci::app::App {
       ci::gl::Texture2dRef background;
       
     private:
-      Level level_;
       int kWindowSizeX = 2400;
       int kWindowSizeY = 2000;
       int kTopMargin = 150;
+    
+      Level level_;
+      
 };
 }

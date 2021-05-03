@@ -33,6 +33,7 @@ namespace frogger {
         
     private:
         float kDifficultDenom = 2000;
+        
         float road_width_;
         std::vector<vec2> spawnpoints_;
         vec2 current_spawnpoint_;

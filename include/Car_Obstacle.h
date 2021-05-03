@@ -25,10 +25,9 @@ namespace frogger {
     private:
         std::vector<ci::Color> kPossibleColors{"aqua", "orangered", "darkviolet", "khaki", "darkgray", "steelblue",
                                          "peachpuff", "lightgreen"};
-        float kVerticalWidth = 75;
+        float kVerticalWidth = 80;
         float kHorizontalWidth = 125;
-        float kRightWall = 2400;
-        float kLeftWall = 0;
+        
         ci::Color color_;
         float move_speed_;
         vec2 top_left_edge_;

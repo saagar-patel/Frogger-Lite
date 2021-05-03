@@ -13,6 +13,7 @@ namespace frogger {
         max_speed_ = max_speed;
         left_to_right_movement_ = direction;
         road_width_ = spawnpoints_[1].x - spawnpoints_[0].x;
+        
         CreateCarObstacles();
     }
     
