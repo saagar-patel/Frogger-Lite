@@ -15,6 +15,7 @@ Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)
   start_time_ = std::chrono::steady_clock::now();
   current_time_ = 0;
   PopulateRoads();
+  PopulateStreams();
 }
 
 
@@ -28,25 +29,10 @@ void Level::Display() const {
   }
   if (!can_move && !game_over) {
     ci::gl::drawStringCentered("Press Spacebar to enable movement.",
-                               vec2(1200, 700),
+                               vec2(1200, 450),
                                ci::Color("Black"),
                                ci::Font("Consolas", 120));
   }
-  
-  
-  
-  ci::gl::drawStringCentered(std::to_string(ci::Rand::randInt(0, 7)),
-                             vec2(900, 400),
-                             ci::Color("purple"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(car_roads_[2].isLeftToRightMovement()),
-                             vec2(900, 500),
-                             ci::Color("purple"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(can_move),
-                             vec2(900, 600),
-                             ci::Color("white"),
-                             ci::Font("Consolas", 100));
 }
 
 void Level::AdvanceOneFrame() {
@@ -159,6 +145,14 @@ void Level::ExecuteLevelCompletion() {
     car_roads_.emplace_back(Road(kR5Spawnpoints, kNumCarsR5, kMinSpeed, kMaxSpeed, ci::Rand::randBool()));
   }
 
+  void Level::PopulateStreams() {
+    gator_streams_.emplace_back(Stream(kS1Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream1Top, kStream1Bot));
+    gator_streams_.emplace_back(Stream(kS2Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream2Top, kStream2Bot));
+    gator_streams_.emplace_back(Stream(kS3Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream3Top, kStream3Bot));
+    gator_streams_.emplace_back(Stream(kS4Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream4Top, kStream4Bot));
+    gator_streams_.emplace_back(Stream(kS5Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream5Top, kStream5Bot));
+  }
+  
   void Level::UpdateRoadDirections() {
     for (size_t i = 0; i < car_roads_.size(); ++i) {
       bool left_to_right_direction = ci::Rand::randBool();
@@ -190,7 +184,6 @@ void Level::ExecuteLevelCompletion() {
   void Level::CountCurrentTime() {
     current_time_ =  std::chrono::duration<double>(std::chrono::steady_clock::now() - start_time_).count();
   }
-
 
 }
 

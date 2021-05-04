@@ -26,6 +26,15 @@ void FroggerApp::draw() {
   ci::gl::color(ci::Color("magenta"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, 278), vec2(kWindowSizeX, 280)));
 
+  ci::gl::color(ci::Color("lightskyblue"));
+  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 422), vec2(kWindowSizeX, 424)));
+  ci::gl::color(ci::Color("lightskyblue"));
+  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 566), vec2(kWindowSizeX, 568)));
+  ci::gl::color(ci::Color("lightskyblue"));
+  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 710), vec2(kWindowSizeX, 712)));
+  ci::gl::color(ci::Color("lightskyblue"));
+  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 854), vec2(kWindowSizeX, 856)));
+  
   ci::gl::color(ci::Color("magenta"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, 998), vec2(kWindowSizeX, 1000)));
   

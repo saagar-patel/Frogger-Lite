@@ -54,7 +54,8 @@ list(APPEND SOURCE_FILES src/Player.cpp
                          src/level.cpp
                          src/Car_Obstacle.cpp
                          src/Road.cpp
-                         src/alligator.cpp)
+                         src/alligator.cpp
+        src/stream.cpp)
 
 list(APPEND TEST_FILES tests/test_main.cpp)
 

@@ -19,8 +19,7 @@ namespace frogger {
     
     void Road::CreateCarObstacles() {
       float speed = ci::Rand::randFloat(min_speed_, max_speed_ + 1);
-      std::vector<Car> temp_cars;
-      temp_cars.reserve(num_cars_);
+
       std::vector<vec2> new_spawnpoints;
       if (left_to_right_movement_) {
         current_spawnpoint_ = spawnpoints_[0];
@@ -40,9 +39,8 @@ namespace frogger {
       }
       
       for (int i = 0; i < num_cars_; ++i) {
-        temp_cars.emplace_back(Car(new_spawnpoints[i], speed));
+        cars_.emplace_back(Car(new_spawnpoints[i], speed));
       }
-      cars_ = temp_cars;
     }
 
     const vec2 &Road::GetCurrentSpawnpoint() const {

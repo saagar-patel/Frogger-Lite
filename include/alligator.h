@@ -18,6 +18,7 @@ namespace frogger {
         const vec2 &GetBotRightEdge() const;
 
         void PlaceGator(const vec2& point);
+        
       private:
         float kVerticalWidth = 80;
         float kHorizontalWidth = 200;

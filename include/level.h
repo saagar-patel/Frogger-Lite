@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "Car_Obstacle.h"
 #include "Road.h"
-
+#include "stream.h"
 
 using glm::vec2;
 
@@ -51,6 +51,21 @@ class Level {
     float kMaxSpeed = 15;
     float kBaseDifficultyScalar = 0.1f;
     float kDifficultyDenominator = 5000.0f;
+    std::vector<vec2> kS1Spawnpoints = {vec2(-100, 352), vec2(2400, 352)};
+    std::vector<vec2> kS2Spawnpoints = {vec2(-100, 496), vec2(2400, 496)};
+    std::vector<vec2> kS3Spawnpoints = {vec2(-100, 640), vec2(2400, 640)};
+    std::vector<vec2> kS4Spawnpoints = {vec2(-100, 784), vec2(2400, 784)};
+    std::vector<vec2> kS5Spawnpoints = {vec2(-100, 928), vec2(2400, 928)};
+    float kStream1Top = 280;
+    float kStream2Top = 424;
+    float kStream3Top = 568;
+    float kStream4Top = 712;
+    float kStream5Top = 856;
+    float kStream1Bot = 424;
+    float kStream2Bot = 568;
+    float kStream3Bot = 712;
+    float kStream4Bot = 856;
+    float kStream5Bot = 1000;
     int kNumCarsR1 = 6;
     int kNumCarsR2 = 2;
     int kNumCarsR3 = 5;
@@ -65,7 +80,7 @@ class Level {
     int kLives = 3;
     
     std::vector<Road> car_roads_;
-//    std::vector<>
+    std::vector<Stream> gator_streams_;
     Player player_;
     
     void ExecuteWallCollision();
@@ -85,6 +100,8 @@ class Level {
     void ResetPlayerPosition();
     
     void PopulateRoads();
+    
+    void PopulateStreams();
     
     void UpdateRoadDirections();
 };
