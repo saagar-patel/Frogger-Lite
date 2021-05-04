@@ -33,10 +33,32 @@ void Level::Display() const {
                                ci::Color("Black"),
                                ci::Font("Consolas", 120));
   }
+
+  ci::gl::drawStringCentered(std::to_string(gator_streams_[0].isPlayerInStream(player_)),
+                             vec2(1800, 450),
+                             ci::Color("Magenta"),
+                             ci::Font("Consolas", 100));
+  ci::gl::drawStringCentered(std::to_string(gator_streams_[1].isPlayerInStream(player_)),
+                             vec2(1800, 500),
+                             ci::Color("Magenta"),
+                             ci::Font("Consolas", 100));
+  ci::gl::drawStringCentered(std::to_string(gator_streams_[2].isPlayerInStream(player_)),
+                             vec2(1800, 550),
+                             ci::Color("Magenta"),
+                             ci::Font("Consolas", 100));
+  ci::gl::drawStringCentered(std::to_string(gator_streams_[3].isPlayerInStream(player_)),
+                             vec2(1800, 600),
+                             ci::Color("Magenta"),
+                             ci::Font("Consolas", 100));
+  ci::gl::drawStringCentered(std::to_string(gator_streams_[4].isPlayerInStream(player_)),
+                             vec2(1800, 650),
+                             ci::Color("Magenta"),
+                             ci::Font("Consolas", 100));
 }
 
 void Level::AdvanceOneFrame() {
   MovePlayer();
+  MovePlayerInStream();
   ExecuteWallCollision();
   ExecuteLevelCompletion();
   ExecuteCarCollision();
@@ -123,6 +145,7 @@ void Level::ExecuteLevelCompletion() {
     level_count_++;
     score_ += static_cast<int>(100 * (1/(0.1 * CountElapsedTime())));
     UpdateRoadDirections();
+    UpdateStreamSettings();
   }
 }
 
@@ -146,11 +169,16 @@ void Level::ExecuteLevelCompletion() {
   }
 
   void Level::PopulateStreams() {
-    gator_streams_.emplace_back(Stream(kS1Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream1Top, kStream1Bot));
-    gator_streams_.emplace_back(Stream(kS2Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream2Top, kStream2Bot));
-    gator_streams_.emplace_back(Stream(kS3Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream3Top, kStream3Bot));
-    gator_streams_.emplace_back(Stream(kS4Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream4Top, kStream4Bot));
-    gator_streams_.emplace_back(Stream(kS5Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream5Top, kStream5Bot));
+    gator_streams_.emplace_back(Stream(kS1Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream1Top,
+                                       kStream1Bot,ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed)));
+    gator_streams_.emplace_back(Stream(kS2Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream2Top,
+                                       kStream2Bot, ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed)));
+    gator_streams_.emplace_back(Stream(kS3Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream3Top,
+                                       kStream3Bot, ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed)));
+    gator_streams_.emplace_back(Stream(kS4Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream4Top,
+                                       kStream4Bot, ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed)));
+    gator_streams_.emplace_back(Stream(kS5Spawnpoints, kMinSpeed, kMaxSpeed, ci::Rand::randBool(), kStream5Top,
+                                       kStream5Bot, ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed)));
   }
   
   void Level::UpdateRoadDirections() {
@@ -184,6 +212,42 @@ void Level::ExecuteLevelCompletion() {
   void Level::CountCurrentTime() {
     current_time_ =  std::chrono::duration<double>(std::chrono::steady_clock::now() - start_time_).count();
   }
+
+  void Level::MovePlayerInStream() {
+    for (size_t i = 0; i < gator_streams_.size(); ++i) {
+      if (gator_streams_[i].isPlayerInStream(player_)) {
+        float difficulty_scalar = kBaseDifficultyScalar + ((static_cast<float>(score_ * level_count_))/kDifficultyDenominator);
+        if (gator_streams_[i].isLeftToRight()) {
+          player_.SetPosition(vec2(player_.GetPosition().x + (difficulty_scalar * gator_streams_[i].GetPlayerMoveSpeed()), player_.GetPosition().y));
+        } else {
+          player_.SetPosition(vec2(player_.GetPosition().x - (difficulty_scalar * gator_streams_[i].GetPlayerMoveSpeed()), player_.GetPosition().y));
+        }
+//        } else {
+//          player_.SetPosition(vec2(player_.GetPosition().x - (difficulty_scalar * 1), player_.GetPosition().y));
+//        }
+      } //gator_streams_[i].GetPlayerMoveSpeed()
+    } 
+  }
+
+  void Level::UpdateStreamSettings() {
+    for (size_t i = 0; i < gator_streams_.size(); ++i) {
+      bool left_to_right_direction = ci::Rand::randBool();
+      gator_streams_[i].SetLeftToRight(left_to_right_direction);
+      float new_speed = ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed);
+      gator_streams_[i].SetPlayerMoveSpeed(new_speed);
+      if (left_to_right_direction) {
+        gator_streams_[i].SetCurrentSpawnpoint(gator_streams_[i].GetSpawnpoints()[0]);
+        gator_streams_[i].SetResetPoint(gator_streams_[i].GetSpawnpoints()[1]);
+      } else {
+        gator_streams_[i].SetCurrentSpawnpoint(gator_streams_[i].GetSpawnpoints()[1]);
+        gator_streams_[i].SetResetPoint(gator_streams_[i].GetSpawnpoints()[0]);
+      }
+    }
+  }
+
+//  void Level::UpdateStreamDirections() {
+//    
+//  }
 
 }
 

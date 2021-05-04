@@ -51,6 +51,10 @@ class Level {
     float kMaxSpeed = 15;
     float kBaseDifficultyScalar = 0.1f;
     float kDifficultyDenominator = 5000.0f;
+    float kMinStreamSpeed = 10;
+    float kMaxStreamSpeed = 20;
+    float kBaseDiffScalarStream = 0.2f;
+    float kDifficultDenomStream = 3000.0f;
     std::vector<vec2> kS1Spawnpoints = {vec2(-100, 352), vec2(2400, 352)};
     std::vector<vec2> kS2Spawnpoints = {vec2(-100, 496), vec2(2400, 496)};
     std::vector<vec2> kS3Spawnpoints = {vec2(-100, 640), vec2(2400, 640)};
@@ -104,5 +108,9 @@ class Level {
     void PopulateStreams();
     
     void UpdateRoadDirections();
+    
+    void UpdateStreamSettings();
+    
+    void MovePlayerInStream();
 };
 }

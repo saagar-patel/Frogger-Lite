@@ -5,11 +5,9 @@
 #include <Player.h>
 
 namespace frogger {
-    bool Stream::isLeftToRight() const {
-      return left_to_right_;
-    }
+    
 
-    Stream::Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed, bool direction, float top_bound, float bot_bound) {
+    Stream::Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed, bool direction, float top_bound, float bot_bound, float player_move_speed) {
         spawnpoints_ = std::move(spawnpoints);
         max_speed_ = max_speed;
         min_speed_ = min_speed;
@@ -17,6 +15,11 @@ namespace frogger {
         left_to_right_ = direction;
         top_bound_ = top_bound;
         bot_bound_ = bot_bound;
+        player_move_speed_ = player_move_speed;
+    }
+
+    bool Stream::isLeftToRight() const {
+      return left_to_right_;
     }
 
     bool Stream::isGatorReachedEnd(const frogger::Alligator &gator) const {
@@ -32,8 +35,8 @@ namespace frogger {
       return false;
     }
 
-    bool Stream::isGatorInStream(const Player &player) const {
-      if (player.GetPosition().y <= top_bound_ && player.GetPosition().y > bot_bound_) {
+    bool Stream::isPlayerInStream(const Player &player) const {
+      if (player.GetPosition().y + player.GetRadius()>= top_bound_ && player.GetPosition().y + player.GetRadius()<= bot_bound_) {
         return true;
       } else {
         return false;
@@ -86,8 +89,16 @@ namespace frogger {
       }
     }
 
-    float Stream::GetKPlayerMoveSpeed() const {
-      return kPlayerMoveSpeed;
+    float Stream::GetPlayerMoveSpeed() const {
+      return player_move_speed_;
+    }
+
+    void Stream::SetPlayerMoveSpeed(float playerMoveSpeed) {
+      player_move_speed_ = playerMoveSpeed;
+    }
+
+    const std::vector<vec2> &Stream::GetSpawnpoints() const {
+      return spawnpoints_;
     }
 
 }

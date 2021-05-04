@@ -9,11 +9,11 @@ namespace frogger {
     class Stream {
       public:
         Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed,
-               bool direction, float top_bound, float bot_bound);
+               bool direction, float top_bound, float bot_bound, float player_move_speed);
         
         bool isGatorReachedEnd(const Alligator& gator) const;
         
-        bool isGatorInStream(const Player &player) const;
+        bool isPlayerInStream(const Player &player) const;
 
         bool isLeftToRight() const;
 
@@ -27,12 +27,16 @@ namespace frogger {
 
         void SetResetPoint(const vec2 &resetPoint);
 
-        float GetKPlayerMoveSpeed() const;
+        void SetPlayerMoveSpeed(float playerMoveSpeed);
+
+        float GetPlayerMoveSpeed() const;
+
+        const std::vector<vec2> &GetSpawnpoints() const;
 
         std::vector<Alligator> gators_;
       private:
         int kNumGators = 2;
-        float kPlayerMoveSpeed = 15;
+        float player_move_speed_;
         bool left_to_right_;
         std::vector<vec2> spawnpoints_;
         float min_speed_;
