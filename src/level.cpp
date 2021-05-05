@@ -64,19 +64,19 @@ void Level::AdvanceOneFrame() {
   }
   for (size_t i = 0; i < car_roads_.size(); ++i) {
     for (size_t j = 0; j < car_roads_[i].cars_.size(); ++j) {
-      car_roads_[i].cars_[j].MoveCar(kBaseDifficultyScalar +
-      ((static_cast<float>(score_ * level_count_))/kDifficultyDenominator),
+      car_roads_[i].cars_[j].MoveCar(kBaseDifficultyScalar + ((static_cast<float>(score_)/kDifficultyDenominator) * static_cast<float>(level_count_)),
       car_roads_[i].isLeftToRightMovement());
       if (car_roads_[i].isCarReachedEnd(car_roads_[i].cars_[j])) {
         car_roads_[i].cars_[j].PlaceCar(car_roads_[i].GetCurrentSpawnpoint());
       }
     }
   }
+  
   for (size_t i = 0; i < gator_streams_.size(); ++i) {
     for (size_t j = 0; j < gator_streams_[i].gators_.size(); ++j) {
-      gator_streams_[i].gators_[j].MoveGator(kBaseDifficultyScalar +
-                                     ((static_cast<float>(score_ * level_count_))/kDifficultyDenominator),
-                                             gator_streams_[i].IsLeftToRight());
+      gator_streams_[i].gators_[j].MoveGator(kBaseDifficultyScalar + 
+                  ((static_cast<float>(score_)/kDifficultyDenominator) * static_cast<float>(level_count_)),
+                  gator_streams_[i].IsLeftToRight());
       if (gator_streams_[i].isGatorReachedEnd(gator_streams_[i].gators_[j])) {
         gator_streams_[i].gators_[j].PlaceGator(gator_streams_[i].GetCurrentSpawnpoint());
       }
