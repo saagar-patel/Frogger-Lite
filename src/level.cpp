@@ -223,7 +223,7 @@ void Level::ExecuteLevelCompletion() {
   void Level::MovePlayerInStream() {
     for (size_t i = 0; i < gator_streams_.size(); ++i) {
       if (gator_streams_[i].isPlayerInStream(player_)) {
-        float difficulty_scalar = kBaseDiffScalarStream + ((static_cast<float>(score_ * level_count_))/kDifficultDenomStream);
+        float difficulty_scalar = kBaseDiffScalarStream + ((static_cast<float>(score_)/kDifficultDenomStream) * static_cast<float>(level_count_));
         if (gator_streams_[i].IsStreamLeftRight()) {
           player_.SetPosition(vec2(player_.GetPosition().x + (difficulty_scalar * gator_streams_[i].GetPlayerMoveSpeed()), player_.GetPosition().y));
         } else {

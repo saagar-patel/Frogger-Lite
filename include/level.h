@@ -55,7 +55,7 @@ class Level {
     float kMinStreamSpeed = 10;
     float kMaxStreamSpeed = 20;
     float kBaseDiffScalarStream = 0.2f;
-    float kDifficultDenomStream = 3000.0f;
+    float kDifficultDenomStream = 6000.0f;
     std::vector<vec2> kS1Spawnpoints = {vec2(-200, 352), vec2(2500, 352)};
     std::vector<vec2> kS2Spawnpoints = {vec2(-200, 496), vec2(2500, 496)};
     std::vector<vec2> kS3Spawnpoints = {vec2(-200, 640), vec2(2500, 640)};
