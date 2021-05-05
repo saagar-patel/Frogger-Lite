@@ -51,13 +51,13 @@ void FroggerApp::draw() {
           ci::Font("Consolas", 100));
 
   ci::gl::drawStringCentered(
-          "Lives: " + std::to_string(level_.GetPlayer().GetLives()),
-          glm::vec2(9 * (kWindowSizeX / 10), kTopMargin/4),
+          "Lives Left: " + std::to_string(level_.GetPlayer().GetLives()),
+          glm::vec2(8 * (kWindowSizeX / 10), kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
   ci::gl::drawStringCentered("Time: " + std::to_string(level_.current_time_),
-                             vec2(6 * (kWindowSizeX / 10), kTopMargin/4),
+                             vec2(5.2 * (kWindowSizeX / 10), kTopMargin/4),
                              ci::Color("Black"),
                              ci::Font("Consolas", 100));
   

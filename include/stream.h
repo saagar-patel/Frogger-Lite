@@ -15,9 +15,13 @@ namespace frogger {
         
         bool isPlayerInStream(const Player &player) const;
 
-        bool isLeftToRight() const;
+        bool IsLeftToRight() const;
 
         void SetLeftToRight(bool leftToRight);
+
+        bool IsStreamLeftRight() const;
+
+        void SetStreamLeftRight(bool streamLeftRight);
 
         const vec2 &GetCurrentSpawnpoint() const;
 
@@ -38,6 +42,7 @@ namespace frogger {
         int kNumGators = 2;
         float player_move_speed_;
         bool left_to_right_;
+        bool stream_left_right_;
         std::vector<vec2> spawnpoints_;
         float min_speed_;
         float max_speed_;

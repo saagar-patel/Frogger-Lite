@@ -51,12 +51,4 @@ void Player::SetLives(int lives) {
   lives_ = lives;
 }
 
-void Player::StreamMovement(bool l_to_r, float move_speed, float difficulty_scalar) {
-  if (l_to_r) {
-    position_.x = position_.x + (difficulty_scalar * move_speed);
-  } else {
-    position_.x = position_.x - (difficulty_scalar * move_speed);
-  }
-}
-
 }

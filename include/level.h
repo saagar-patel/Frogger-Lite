@@ -5,6 +5,7 @@
 #include "Car_Obstacle.h"
 #include "Road.h"
 #include "stream.h"
+#include "coin.h"
 
 using glm::vec2;
 
@@ -55,11 +56,11 @@ class Level {
     float kMaxStreamSpeed = 20;
     float kBaseDiffScalarStream = 0.2f;
     float kDifficultDenomStream = 3000.0f;
-    std::vector<vec2> kS1Spawnpoints = {vec2(-100, 352), vec2(2400, 352)};
-    std::vector<vec2> kS2Spawnpoints = {vec2(-100, 496), vec2(2400, 496)};
-    std::vector<vec2> kS3Spawnpoints = {vec2(-100, 640), vec2(2400, 640)};
-    std::vector<vec2> kS4Spawnpoints = {vec2(-100, 784), vec2(2400, 784)};
-    std::vector<vec2> kS5Spawnpoints = {vec2(-100, 928), vec2(2400, 928)};
+    std::vector<vec2> kS1Spawnpoints = {vec2(-200, 352), vec2(2500, 352)};
+    std::vector<vec2> kS2Spawnpoints = {vec2(-200, 496), vec2(2500, 496)};
+    std::vector<vec2> kS3Spawnpoints = {vec2(-200, 640), vec2(2500, 640)};
+    std::vector<vec2> kS4Spawnpoints = {vec2(-200, 784), vec2(2500, 784)};
+    std::vector<vec2> kS5Spawnpoints = {vec2(-200, 928), vec2(2500, 928)};
     float kStream1Top = 280;
     float kStream2Top = 424;
     float kStream3Top = 568;
@@ -82,9 +83,12 @@ class Level {
     float kTopWall = 150;
     float kBottomWall = 2000;
     int kLives = 3;
+    size_t kNumCoins = 1;
+    int kCoinValue = 50;
     
     std::vector<Road> car_roads_;
     std::vector<Stream> gator_streams_;
+    std::vector<Coin> coins_;
     Player player_;
     
     void ExecuteWallCollision();
@@ -92,6 +96,8 @@ class Level {
     void ExecuteLevelCompletion();
     
     void ExecuteCarCollision();
+    
+    void ExecuteGatorCollision();
     
     void DrawLevelObjective(const vec2& level_goal) const;
     
@@ -106,6 +112,8 @@ class Level {
     void PopulateRoads();
     
     void PopulateStreams();
+    
+    void CreateCoins();
     
     void UpdateRoadDirections();
     

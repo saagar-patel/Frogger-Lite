@@ -16,6 +16,7 @@ Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)
   current_time_ = 0;
   PopulateRoads();
   PopulateStreams();
+  CreateCoins();
 }
 
 
@@ -27,33 +28,23 @@ void Level::Display() const {
       car.DrawCar();
     }
   }
+  for (const Stream& stream : gator_streams_) {
+    for (Alligator gator : stream.gators_) {
+      gator.DrawGator();
+    }
+  }
+  for (Coin coin : coins_) {
+    if(!coin.IsCollected()) {
+      coin.DrawCoin();
+    }
+  }
   if (!can_move && !game_over) {
+
     ci::gl::drawStringCentered("Press Spacebar to enable movement.",
                                vec2(1200, 450),
-                               ci::Color("Black"),
+                               ci::Color("White"),
                                ci::Font("Consolas", 120));
   }
-
-  ci::gl::drawStringCentered(std::to_string(gator_streams_[0].isPlayerInStream(player_)),
-                             vec2(1800, 450),
-                             ci::Color("Magenta"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(gator_streams_[1].isPlayerInStream(player_)),
-                             vec2(1800, 500),
-                             ci::Color("Magenta"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(gator_streams_[2].isPlayerInStream(player_)),
-                             vec2(1800, 550),
-                             ci::Color("Magenta"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(gator_streams_[3].isPlayerInStream(player_)),
-                             vec2(1800, 600),
-                             ci::Color("Magenta"),
-                             ci::Font("Consolas", 100));
-  ci::gl::drawStringCentered(std::to_string(gator_streams_[4].isPlayerInStream(player_)),
-                             vec2(1800, 650),
-                             ci::Color("Magenta"),
-                             ci::Font("Consolas", 100));
 }
 
 void Level::AdvanceOneFrame() {
@@ -62,6 +53,15 @@ void Level::AdvanceOneFrame() {
   ExecuteWallCollision();
   ExecuteLevelCompletion();
   ExecuteCarCollision();
+  ExecuteGatorCollision();
+  for (Coin &coin : coins_) {
+    if (!coin.IsCollected()) {
+      if (coin.CheckCoinCollision(player_)) {
+        coin.SetIsCollected(true);
+        score_ += coin.GetValue();
+      }
+    }
+  }
   for (size_t i = 0; i < car_roads_.size(); ++i) {
     for (size_t j = 0; j < car_roads_[i].cars_.size(); ++j) {
       car_roads_[i].cars_[j].MoveCar(kBaseDifficultyScalar +
@@ -69,6 +69,16 @@ void Level::AdvanceOneFrame() {
       car_roads_[i].isLeftToRightMovement());
       if (car_roads_[i].isCarReachedEnd(car_roads_[i].cars_[j])) {
         car_roads_[i].cars_[j].PlaceCar(car_roads_[i].GetCurrentSpawnpoint());
+      }
+    }
+  }
+  for (size_t i = 0; i < gator_streams_.size(); ++i) {
+    for (size_t j = 0; j < gator_streams_[i].gators_.size(); ++j) {
+      gator_streams_[i].gators_[j].MoveGator(kBaseDifficultyScalar +
+                                     ((static_cast<float>(score_ * level_count_))/kDifficultyDenominator),
+                                             gator_streams_[i].IsLeftToRight());
+      if (gator_streams_[i].isGatorReachedEnd(gator_streams_[i].gators_[j])) {
+        gator_streams_[i].gators_[j].PlaceGator(gator_streams_[i].GetCurrentSpawnpoint());
       }
     }
   }
@@ -111,23 +121,16 @@ void Level::ExecuteWallCollision() {
 }
 
 void Level::ResetPlayerPosition() {
-  if (player_.GetLives() <= 1) {
+  if (player_.GetLives() < 1) {
     game_over = true;
-    can_move = false;
-    isMovingRight = false;
-    isMovingLeft = false;
-    isMovingUp = false;
-    isMovingDown = false;
-  } else {
-    can_move = false;
-    player_.SetPosition(kPlayerSpawnPoint);
-    isMovingRight = false;
-    isMovingLeft = false;
-    isMovingUp = false;
-    isMovingDown = false;
-    current_time_ = 0.0;
   }
-  
+  player_.SetPosition(kPlayerSpawnPoint);
+  can_move = false;
+  isMovingRight = false;
+  isMovingLeft = false;
+  isMovingUp = false;
+  isMovingDown = false;
+  current_time_ = 0.0;
 }
 
 void Level::DrawLevelObjective(const vec2& level_goal) const {
@@ -140,12 +143,16 @@ void Level::DrawLevelObjective(const vec2& level_goal) const {
 void Level::ExecuteLevelCompletion() {
   ci::Rand::randomize();
   if (distance(player_.GetPosition(), kLevelObjective) < player_.GetRadius() + kObjectiveRadius) {
-    ResetPlayerPosition();
     player_.SetLives(3);
+    ResetPlayerPosition();
     level_count_++;
     score_ += static_cast<int>(100 * (1/(0.1 * CountElapsedTime())));
     UpdateRoadDirections();
     UpdateStreamSettings();
+    for (Coin &coin :coins_) {
+      coin.SetIsCollected(false);
+      coin.SetToRandomPosition();
+    }
   }
 }
 
@@ -216,16 +223,13 @@ void Level::ExecuteLevelCompletion() {
   void Level::MovePlayerInStream() {
     for (size_t i = 0; i < gator_streams_.size(); ++i) {
       if (gator_streams_[i].isPlayerInStream(player_)) {
-        float difficulty_scalar = kBaseDifficultyScalar + ((static_cast<float>(score_ * level_count_))/kDifficultyDenominator);
-        if (gator_streams_[i].isLeftToRight()) {
+        float difficulty_scalar = kBaseDiffScalarStream + ((static_cast<float>(score_ * level_count_))/kDifficultDenomStream);
+        if (gator_streams_[i].IsStreamLeftRight()) {
           player_.SetPosition(vec2(player_.GetPosition().x + (difficulty_scalar * gator_streams_[i].GetPlayerMoveSpeed()), player_.GetPosition().y));
         } else {
           player_.SetPosition(vec2(player_.GetPosition().x - (difficulty_scalar * gator_streams_[i].GetPlayerMoveSpeed()), player_.GetPosition().y));
         }
-//        } else {
-//          player_.SetPosition(vec2(player_.GetPosition().x - (difficulty_scalar * 1), player_.GetPosition().y));
-//        }
-      } //gator_streams_[i].GetPlayerMoveSpeed()
+      }
     } 
   }
 
@@ -233,6 +237,7 @@ void Level::ExecuteLevelCompletion() {
     for (size_t i = 0; i < gator_streams_.size(); ++i) {
       bool left_to_right_direction = ci::Rand::randBool();
       gator_streams_[i].SetLeftToRight(left_to_right_direction);
+      gator_streams_[i].SetStreamLeftRight(!left_to_right_direction);
       float new_speed = ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed);
       gator_streams_[i].SetPlayerMoveSpeed(new_speed);
       if (left_to_right_direction) {
@@ -245,9 +250,24 @@ void Level::ExecuteLevelCompletion() {
     }
   }
 
-//  void Level::UpdateStreamDirections() {
-//    
-//  }
+  void Level::ExecuteGatorCollision() {
+    for (size_t i = 0; i < gator_streams_.size(); ++i) {
+      for (size_t j = 0; j < gator_streams_[i].gators_.size(); ++j) {
+        if (player_.GetPosition().x - player_.GetRadius() <= gator_streams_[i].gators_[j].GetBotRightEdge().x &&
+            player_.GetPosition().x + player_.GetRadius() >= gator_streams_[i].gators_[j].GetTopLeftEdge().x &&
+            player_.GetPosition().y + player_.GetRadius() >= gator_streams_[i].gators_[j].GetTopLeftEdge().y &&
+            player_.GetPosition().y - player_.GetRadius() <= gator_streams_[i].gators_[j].GetBotRightEdge().y) {
+          ResetPlayerPosition();
+          DecreaseLives();
+        }
+      }
+    }
+  }
 
+  void Level::CreateCoins() {
+    for (size_t i = 0; i < kNumCoins; ++i) {
+      coins_.emplace_back(Coin(kRightWall, kBottomWall, kTopWall + 50, kCoinValue));
+    }
+  }
 }
 

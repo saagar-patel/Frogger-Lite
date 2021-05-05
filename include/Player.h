@@ -14,7 +14,6 @@ class Player {
     void MoveRight();
     void MoveLeft();
     void MoveDown();
-    void StreamMovement(bool l_to_r, float move_speed, float difficulty_scalar);
     
     void DrawPlayer() const;
     

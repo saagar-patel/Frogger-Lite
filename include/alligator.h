@@ -20,10 +20,10 @@ namespace frogger {
         void PlaceGator(const vec2& point);
         
       private:
-        float kVerticalWidth = 80;
-        float kHorizontalWidth = 200;
+        float kVerticalWidth = 100;
+        float kHorizontalWidth = 240;
 
-        ci::Color kColor = "green";
+        ci::Color kColor = "darkgreen";
         float move_speed_;
         vec2 top_left_edge_;
         vec2 bot_right_edge_;

@@ -13,12 +13,15 @@ namespace frogger {
         min_speed_ = min_speed;
         stream_width = spawnpoints_[1].x - spawnpoints_[0].x;
         left_to_right_ = direction;
+        stream_left_right_ = !direction;
         top_bound_ = top_bound;
         bot_bound_ = bot_bound;
         player_move_speed_ = player_move_speed;
+        
+        CreateGatorObstacles();
     }
 
-    bool Stream::isLeftToRight() const {
+    bool Stream::IsLeftToRight() const {
       return left_to_right_;
     }
 
@@ -99,6 +102,14 @@ namespace frogger {
 
     const std::vector<vec2> &Stream::GetSpawnpoints() const {
       return spawnpoints_;
+    }
+
+    bool Stream::IsStreamLeftRight() const {
+      return stream_left_right_;
+    }
+
+    void Stream::SetStreamLeftRight(bool streamLeftRight) {
+      stream_left_right_ = streamLeftRight;
     }
 
 }
