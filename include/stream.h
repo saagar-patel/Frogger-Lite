@@ -2,12 +2,15 @@
 
 #include "cinder/gl/gl.h"
 #include "alligator.h"
-#include "Player.h"
+#include "player.h"
 
 namespace frogger {
+    
     using glm::vec2;
+    
     class Stream {
       public:
+        
         Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed,
                bool direction, float top_bound, float bot_bound, float player_move_speed);
         
@@ -27,8 +30,6 @@ namespace frogger {
 
         void SetCurrentSpawnpoint(const vec2 &currentSpawnpoint);
 
-        const vec2 &GetResetPoint() const;
-
         void SetResetPoint(const vec2 &resetPoint);
 
         void SetPlayerMoveSpeed(float playerMoveSpeed);
@@ -38,6 +39,7 @@ namespace frogger {
         const std::vector<vec2> &GetSpawnpoints() const;
 
         std::vector<Alligator> gators_;
+        
       private:
         int kNumGators = 2;
         float player_move_speed_;

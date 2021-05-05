@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cinder/gl/gl.h"
-#include "Car_Obstacle.h"
+#include "car.h"
 
 namespace frogger {
 
@@ -12,15 +12,13 @@ namespace frogger {
     public:
         Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool direction);
 
-        bool isCarReachedEnd(const Car& car) const;
+        bool IsCarReachedEnd(const Car& car) const;
         
         const vec2 &GetCurrentSpawnpoint() const;
-        
-        const vec2 &GetDestructionPoint() const;
 
         void SetLeftToRightMovement(bool leftToRightMovement);
 
-        bool isLeftToRightMovement() const;
+        bool IsLeftToRightMovement() const;
 
         void SetCurrentSpawnpoint(const vec2 &currentSpawnpoint);
 
@@ -28,12 +26,10 @@ namespace frogger {
 
         const std::vector<vec2> &GetSpawnpoints() const;
 
-        std::vector<Car> cars_;
-
+        std::vector<Car> &GetCars();
         
     private:
-        float kDifficultDenom = 2000;
-        
+        std::vector<Car> cars_;
         float road_width_;
         std::vector<vec2> spawnpoints_;
         vec2 current_spawnpoint_;
@@ -44,7 +40,5 @@ namespace frogger {
         float max_speed_;
 
         void CreateCarObstacles();
-        
-        
     };
 }

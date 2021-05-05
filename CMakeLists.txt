@@ -49,11 +49,11 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND SOURCE_FILES src/Player.cpp
+list(APPEND SOURCE_FILES src/player.cpp
                          src/frogger_app.cpp
                          src/level.cpp
-                         src/Car_Obstacle.cpp
-                         src/Road.cpp
+        src/car.cpp
+        src/road.cpp
                          src/alligator.cpp
                          src/stream.cpp
         src/coin.cpp)

@@ -2,10 +2,9 @@
 
 #include <utility>
 #include <cinder/Rand.h>
-#include <Player.h>
+#include <player.h>
 
 namespace frogger {
-    
 
     Stream::Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed, bool direction, float top_bound, float bot_bound, float player_move_speed) {
         spawnpoints_ = std::move(spawnpoints);
@@ -17,7 +16,6 @@ namespace frogger {
         top_bound_ = top_bound;
         bot_bound_ = bot_bound;
         player_move_speed_ = player_move_speed;
-        
         CreateGatorObstacles();
     }
 
@@ -30,7 +28,7 @@ namespace frogger {
         if (gator.GetTopLeftEdge().x >= reset_point.x) {
           return true;
         }
-      } else if (!left_to_right_) {
+      } else {
         if (gator.GetBotRightEdge().x <= reset_point.x) {
           return true;
         }
@@ -41,9 +39,8 @@ namespace frogger {
     bool Stream::isPlayerInStream(const Player &player) const {
       if (player.GetPosition().y + player.GetRadius()>= top_bound_ && player.GetPosition().y + player.GetRadius()<= bot_bound_) {
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
     
     void Stream::SetLeftToRight(bool leftToRight) {
@@ -58,17 +55,13 @@ namespace frogger {
       current_spawnpoint_ = currentSpawnpoint;
     }
 
-    const glm::vec2 &Stream::GetResetPoint() const {
-      return reset_point;
-    }
-
     void Stream::SetResetPoint(const glm::vec2 &resetPoint) {
       reset_point = resetPoint;
     }
 
     void Stream::CreateGatorObstacles() {
       float speed = ci::Rand::randFloat(min_speed_, max_speed_);
-      std::vector<vec2> new_spawnpoints;
+      //assigns initial directions and spawnpoints 
       if (left_to_right_) {
         current_spawnpoint_ = spawnpoints_[0];
         reset_point = spawnpoints_[1];
@@ -76,19 +69,12 @@ namespace frogger {
         current_spawnpoint_ = spawnpoints_[1];
         reset_point = spawnpoints_[0];
       }
-
       for (int i = 0; i < kNumGators; ++i) {
-        vec2 sp_point = vec2(0,0);
         if (left_to_right_) {
-          sp_point = vec2(current_spawnpoint_.x + ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y);
+          gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x + ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
         } else {
-          sp_point = vec2(current_spawnpoint_.x - ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y);
+          gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x - ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
         }
-        new_spawnpoints.emplace_back(sp_point);
-      }
-
-      for (int i = 0; i < kNumGators; ++i) {
-        gators_.emplace_back(Alligator(new_spawnpoints[i], speed));
       }
     }
 

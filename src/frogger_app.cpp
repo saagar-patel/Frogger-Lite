@@ -1,6 +1,5 @@
 #include "frogger_app.h"
 #include "level.h"
-#include "cinder/Font.h"
 
 namespace frogger {
     
@@ -9,8 +8,9 @@ FroggerApp::FroggerApp() : level_(Level()){
 }
 
 void FroggerApp::setup() {
+  //loads in and sets background_
   auto img = ci::loadImage((loadAsset("../assets/background-complete.png")));
-  background = ci::gl::Texture2d::create(img);
+  background_ = ci::gl::Texture2d::create(img);
 }
 
 void FroggerApp::draw() {
@@ -18,14 +18,13 @@ void FroggerApp::draw() {
   ci::gl::clear(bg_color);
 
   ci::gl::color(ci::Color("white"));
-  ci::gl::draw(background, ci::Rectf(vec2(0,0), vec2(kWindowSizeX, kWindowSizeY)));
+  ci::gl::draw(background_, ci::Rectf(vec2(0, 0), vec2(kWindowSizeX, kWindowSizeY)));
 
+  //Draws top border below game stats
   ci::gl::color(ci::Color("black"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, kTopMargin - 8), vec2(kWindowSizeX, kTopMargin)));
 
-  ci::gl::color(ci::Color("magenta"));
-  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 278), vec2(kWindowSizeX, 280)));
-
+  //Draws lines that splits up streams in river
   ci::gl::color(ci::Color("lightskyblue"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, 422), vec2(kWindowSizeX, 424)));
   ci::gl::color(ci::Color("lightskyblue"));
@@ -35,17 +34,14 @@ void FroggerApp::draw() {
   ci::gl::color(ci::Color("lightskyblue"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, 854), vec2(kWindowSizeX, 856)));
   
-  ci::gl::color(ci::Color("magenta"));
-  ci::gl::drawSolidRect(ci::Rectf(vec2(0, 998), vec2(kWindowSizeX, 1000)));
-  
   ci::gl::drawStringCentered(
-          "Level: " + std::to_string(level_.level_count_),
+          "Level: " + std::to_string(level_.GetLevelCount()),
           glm::vec2((kWindowSizeX / 10) * 3, kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
   ci::gl::drawStringCentered(
-          "Score: " + std::to_string(level_.score_),
+          "Score: " + std::to_string(level_.GetScore()),
           glm::vec2(kWindowSizeX / 10, kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
@@ -56,15 +52,17 @@ void FroggerApp::draw() {
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
-  ci::gl::drawStringCentered("Time: " + std::to_string(level_.current_time_),
-                             vec2(5.2 * (kWindowSizeX / 10), kTopMargin/4),
-                             ci::Color("Black"),
-                             ci::Font("Consolas", 100));
+  ci::gl::drawStringCentered(
+          "Time: " + std::to_string(level_.GetCurrentTimeCount()),
+          vec2(5.2 * (kWindowSizeX / 10.0), kTopMargin/4),
+          ci::Color("Black"),
+          ci::Font("Consolas", 100));
   
   ci::gl::color(ci::Color("pink"));
   level_.Display();
 
-  if (level_.game_over) {
+  //Draws game overlay for when game is over
+  if (level_.IsGameOver()) {
     ci::gl::color(ci::Color("black"));
     ci::gl::drawSolidRect(ci::Rectf(vec2(0, 0), vec2(kWindowSizeX, kWindowSizeY)));
     ci::gl::drawStringCentered(
@@ -73,7 +71,7 @@ void FroggerApp::draw() {
             ci::Color("white"),
             ci::Font("Consolas", 150));
     ci::gl::drawStringCentered(
-            "Final Score: " + std::to_string(level_.score_),
+            "Final Score: " + std::to_string(level_.GetScore()),
             glm::vec2(kWindowSizeX/2, 3 * kWindowSizeY/7),
             ci::Color("white"),
             ci::Font("Consolas", 125));
@@ -90,25 +88,26 @@ void FroggerApp::update() {
 }
 
 void FroggerApp::keyDown(ci::app::KeyEvent event) {
+  //handles movement enabling at the start of each attempt
   if (event.getCode() == ci::app::KeyEvent::KEY_SPACE) {
-    level_.can_move = true;
+    level_.SetCanMove(true);
   }
-  if (level_.can_move && !level_.game_over) {
+  if (level_.IsCanMove() && !level_.IsGameOver()) {
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_w:
-        level_.isMovingUp = true;
+        level_.SetIsMovingUp(true);
         break;
 
       case ci::app::KeyEvent::KEY_a:
-        level_.isMovingLeft = true;
+        level_.SetIsMovingLeft(true);
         break;
 
       case ci::app::KeyEvent::KEY_s:
-        level_.isMovingDown = true;
+        level_.SetIsMovingDown(true);
         break;
 
       case ci::app::KeyEvent::KEY_d:
-        level_.isMovingRight = true;
+        level_.SetIsMovingRight(true);
         break;
     }
   }
@@ -117,19 +116,19 @@ void FroggerApp::keyDown(ci::app::KeyEvent event) {
 void FroggerApp::keyUp(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_w:
-      level_.isMovingUp = false;
+      level_.SetIsMovingUp(false);
       break;
 
     case ci::app::KeyEvent::KEY_a:
-      level_.isMovingLeft = false;
+      level_.SetIsMovingLeft(false);
       break;
 
     case ci::app::KeyEvent::KEY_s:
-      level_.isMovingDown = false;
+      level_.SetIsMovingDown(false);
       break;
 
     case ci::app::KeyEvent::KEY_d:
-      level_.isMovingRight = false;
+      level_.SetIsMovingRight(false);
       break;
   }
 }

@@ -1,4 +1,4 @@
-#include "Car_Obstacle.h"
+#include "car.h"
 #include "cinder/Rand.h"
 
 namespace frogger {
@@ -18,15 +18,13 @@ void Car::DrawCar() {
 }
 
 void Car::MoveCar(float difficulty_scalar, bool direction) {
-  float direction_coeff = 0;
   if (direction) {
-    direction_coeff = 1.0f;
+    top_left_edge_.x += difficulty_scalar * move_speed_;
+    bot_right_edge_.x += difficulty_scalar * move_speed_;
   } else {
-    direction_coeff = -1.0f;
+    top_left_edge_.x += (-1.0f * difficulty_scalar * move_speed_);
+    bot_right_edge_.x += (-1.0f * difficulty_scalar * move_speed_);
   }
-  
-  top_left_edge_.x += (direction_coeff * difficulty_scalar) * move_speed_;
-  bot_right_edge_.x += (direction_coeff * difficulty_scalar) * move_speed_;
 }
 
 const vec2 &Car::GetTopLeftEdge() const {

@@ -18,13 +18,12 @@ class FroggerApp : public ci::app::App {
       void keyDown(ci::app::KeyEvent event) override;
       void keyUp(ci::app::KeyEvent event) override;
       
-      ci::gl::Texture2dRef background;
-      
     private:
       int kWindowSizeX = 2400;
       int kWindowSizeY = 2000;
       int kTopMargin = 150;
-    
+      
+      ci::gl::Texture2dRef background_;
       Level level_;
       
 };

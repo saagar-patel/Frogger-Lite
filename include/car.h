@@ -8,7 +8,6 @@ namespace frogger {
 
     class Car {
       public:
-        
         Car(const vec2& spawnpoint, float speed);
         
         void DrawCar();
@@ -20,11 +19,10 @@ namespace frogger {
         const vec2 &GetBotRightEdge() const;
         
         void PlaceCar(const vec2& point);
-
-
+        
     private:
-        std::vector<ci::Color> kPossibleColors{"aqua", "orangered", "darkviolet", "khaki", "darkgray", "steelblue",
-                                         "peachpuff", "lightgreen"};
+        std::vector<ci::Color> kPossibleColors{"aqua", "orange", "darkviolet", "deepskyblue",
+                                               "darkgray", "steelblue", "red", "lightgreen"};
         float kVerticalWidth = 80;
         float kHorizontalWidth = 125;
         
@@ -32,6 +30,5 @@ namespace frogger {
         float move_speed_;
         vec2 top_left_edge_;
         vec2 bot_right_edge_;
-        
     };
 }

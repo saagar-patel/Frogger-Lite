@@ -5,7 +5,7 @@
 A frogger-esque 2D birds-eye view obstacle based game. The user will start at one side
 of the window and will have to navigate to the other side to advance a level. There will
 be a certain amount of lives allotted and any collision with obstacles or enemies will
-decrease the lives the player has. The game will involve keyboard input, cinder-based
+decrease the lives the Player has. The game will involve keyboard input, cinder-based
 animation and movement, and a simple graphical display.
 
 ## 2. Motivation and Background
@@ -19,7 +19,7 @@ solely by myself and that is an experience I am looking forward to.
 ## 3. Timeline
 
 ###Week 1: Set-Up + Player
-* Implement player character and movement
+* Implement Player character and movement
 * Implement basic level advancing and score-keeping
 * Create a basic level layout
 

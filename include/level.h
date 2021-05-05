@@ -1,9 +1,9 @@
 #pragma once
 
 #include "cinder/gl/gl.h"
-#include "Player.h"
-#include "Car_Obstacle.h"
-#include "Road.h"
+#include "player.h"
+#include "car.h"
+#include "road.h"
 #include "stream.h"
 #include "coin.h"
 
@@ -13,21 +13,6 @@ namespace frogger {
 
 class Level {
   public:
-    int score_;
-    unsigned level_count_;
-    std::chrono::time_point<std::chrono::steady_clock> start_time_;
-    std::chrono::time_point<std::chrono::steady_clock> end_time_;
-    double current_time_;
-    
-    bool isMovingUp = false;
-    bool isMovingDown = false;
-    bool isMovingRight = false;
-    bool isMovingLeft = false;
-    
-    bool can_move = false;
-    
-    bool game_over = false;
-    
     explicit Level();
     
     void Display() const;
@@ -39,6 +24,26 @@ class Level {
     Player GetPlayer();
     
     void MovePlayer();
+
+    int GetScore() const;
+
+    unsigned int GetLevelCount() const;
+
+    void SetIsMovingUp(bool isMovingUp);
+
+    void SetIsMovingDown(bool isMovingDown);
+
+    void SetIsMovingRight(bool isMovingRight);
+
+    void SetIsMovingLeft(bool isMovingLeft);
+
+    bool IsCanMove() const;
+
+    bool IsGameOver() const;
+
+    void SetCanMove(bool canMove);
+
+    double GetCurrentTimeCount() const;
 
   private:
     vec2 kPlayerSpawnPoint = vec2(1200, 1930);
@@ -71,6 +76,7 @@ class Level {
     float kStream3Bot = 712;
     float kStream4Bot = 856;
     float kStream5Bot = 1000;
+    //number of cars per level T: kNumCarsRT
     int kNumCarsR1 = 6;
     int kNumCarsR2 = 2;
     int kNumCarsR3 = 5;
@@ -78,17 +84,33 @@ class Level {
     int kNumCarsR5 = 3;
     float kDefaultRadius = 30;
     float kObjectiveRadius = 20;
+    //wall positions for level
     float kRightWall = 2400;
     float kLeftWall = 0;
     float kTopWall = 150;
     float kBottomWall = 2000;
+    //number of lives that the Player has
     int kLives = 3;
     size_t kNumCoins = 1;
-    int kCoinValue = 50;
-    
-    std::vector<Road> car_roads_;
-    std::vector<Stream> gator_streams_;
-    std::vector<Coin> coins_;
+    int kCoinValue = 50; //score gained per coin obtained
+    float kCoinSpawnMargin = 200;
+
+    //booleans determining current movement of Player
+    bool isMovingUp_ = false;
+    bool isMovingDown_ = false;
+    bool isMovingRight_ = false;
+    bool isMovingLeft_ = false;
+    //members tracking time related info for level
+    std::chrono::time_point<std::chrono::steady_clock> start_time_;
+    std::chrono::time_point<std::chrono::steady_clock> end_time_;
+    double current_time_;
+    bool can_move_ = false;
+    bool game_over_ = false;
+    int score_;
+    unsigned level_count_;
+    std::vector<Road> car_roads_; //stores all the roads in the level
+    std::vector<Stream> gator_streams_; //stores all streams in the level
+    std::vector<Coin> coins_; //stores all coins on level
     Player player_;
     
     void ExecuteWallCollision();
@@ -101,9 +123,9 @@ class Level {
     
     void DrawLevelObjective(const vec2& level_goal) const;
     
-    double CountElapsedTime();
+    double ComputeElapsedTime();
     
-    void CountCurrentTime();
+    void ComputeCurrentTime();
 
     void DecreaseLives();
     
@@ -121,4 +143,5 @@ class Level {
     
     void MovePlayerInStream();
 };
+
 }

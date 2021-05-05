@@ -14,16 +14,8 @@ namespace frogger {
       collected_ = false;
     }
 
-    const glm::vec2 &frogger::Coin::GetPosition() const {
-      return position_;
-    }
-
-    void Coin::SetPosition(const glm::vec2 &position) {
-      position_ = position;
-    }
-
     void Coin::SetToRandomPosition() {
-      position_ = vec2(ci::Rand::randFloat(0, max_x_ - margin_),
+      position_ = vec2(ci::Rand::randFloat(margin_, max_x_ - margin_),
                        ci::Rand::randFloat(margin_, max_y_ - margin_));
     }
 
@@ -54,8 +46,7 @@ namespace frogger {
     int Coin::GetValue() const {
       return value_;
     }
-
-
+    
 }
 
 
