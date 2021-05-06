@@ -76,7 +76,7 @@ void Level::AdvanceOneFrame() {
                                         ((static_cast<float>(score_)/kDifficultyDenominator)
                                         * static_cast<float>(level_count_)/2),
                                         gator_stream.IsLeftToRight());
-      if (gator_stream.isGatorReachedEnd(gator)) {
+      if (gator_stream.IsGatorReachedEnd(gator)) {
         gator.PlaceGator(gator_stream.GetCurrentSpawnpoint());
       }
     }

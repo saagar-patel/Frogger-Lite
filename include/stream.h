@@ -14,7 +14,7 @@ namespace frogger {
         Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed,
                bool direction, float top_bound, float bot_bound, float player_move_speed);
         
-        bool isGatorReachedEnd(const Alligator& gator) const;
+        bool IsGatorReachedEnd(const Alligator& gator) const;
         
         bool isPlayerInStream(const Player &player) const;
 

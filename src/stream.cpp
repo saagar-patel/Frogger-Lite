@@ -23,7 +23,7 @@ bool Stream::IsLeftToRight() const {
   return left_to_right_;
 }
 
-bool Stream::isGatorReachedEnd(const frogger::Alligator &gator) const {
+bool Stream::IsGatorReachedEnd(const frogger::Alligator &gator) const {
   if (left_to_right_) {
     if (gator.GetTopLeftEdge().x >= reset_point.x) {
       return true;

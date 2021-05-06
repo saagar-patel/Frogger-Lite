@@ -21,7 +21,11 @@ namespace frogger {
         void DrawCoin() const;
         
         bool CheckCoinCollision(const Player& player);
-        
+
+        const vec2 &GetPosition() const;
+
+        void SetPosition(const vec2 &position);
+
     private:
         ci::Color kColor = "goldenrod";
         float kXRadius = 24;

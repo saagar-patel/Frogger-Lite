@@ -61,7 +61,11 @@ list(APPEND SOURCE_FILES src/player.cpp
 list(APPEND TEST_FILES tests/test_main.cpp
                        tests/level_test.cpp
         tests/player_test.cpp
-        tests/road_test.cpp)
+        tests/road_test.cpp
+        tests/stream_test.cpp
+        tests/car_test.cpp
+        tests/alligator_test.cpp
+        tests/coin_test.cpp)
 
 ci_make_app(
         APP_NAME        frogger-main

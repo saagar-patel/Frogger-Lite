@@ -17,8 +17,8 @@ void Car::DrawCar() const{
   ci::gl::drawSolidRect(ci::Rectf(top_left_edge_, bot_right_edge_));
 }
 
-void Car::MoveCar(float difficulty_scalar, bool direction) {
-  if (direction) {
+void Car::MoveCar(float difficulty_scalar, bool left_to_right) {
+  if (left_to_right) {
     top_left_edge_.x += difficulty_scalar * move_speed_;
     bot_right_edge_.x += difficulty_scalar * move_speed_;
   } else {

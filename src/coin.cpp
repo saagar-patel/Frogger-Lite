@@ -46,7 +46,15 @@ namespace frogger {
     int Coin::GetValue() const {
       return value_;
     }
-    
+
+    const vec2 &Coin::GetPosition() const {
+      return position_;
+    }
+
+    void Coin::SetPosition(const vec2 &position) {
+      position_ = position;
+    }
+
 }
 
 

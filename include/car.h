@@ -12,7 +12,7 @@ namespace frogger {
         
         void DrawCar() const;
         
-        void MoveCar(float difficulty_scalar, bool direction);
+        void MoveCar(float difficulty_scalar, bool left_to_right);
 
         const vec2 &GetTopLeftEdge() const;
 
