@@ -18,7 +18,7 @@ namespace frogger {
 
         int GetValue() const;
 
-        void DrawCoin();
+        void DrawCoin() const;
         
         bool CheckCoinCollision(const Player& player);
         

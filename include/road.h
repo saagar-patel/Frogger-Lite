@@ -10,7 +10,7 @@ namespace frogger {
     class Road {
 
     public:
-        Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool direction);
+        Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool left_to_right);
 
         bool IsCarReachedEnd(const Car& car) const;
         

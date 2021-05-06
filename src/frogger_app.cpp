@@ -36,7 +36,7 @@ void FroggerApp::draw() {
   
   ci::gl::drawStringCentered(
           "Level: " + std::to_string(level_.GetLevelCount()),
-          glm::vec2((kWindowSizeX / 10) * 3, kTopMargin/4),
+          glm::vec2((kWindowSizeX / 10) * 2.8, kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 

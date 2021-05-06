@@ -9,7 +9,7 @@ namespace frogger {
       public:
         Alligator(const vec2& spawnpoint, float speed);
 
-        void DrawGator();
+        void DrawGator() const;
 
         void MoveGator(float difficulty_scalar, bool direction);
 

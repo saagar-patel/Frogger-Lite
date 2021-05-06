@@ -10,7 +10,7 @@ namespace frogger {
       public:
         Car(const vec2& spawnpoint, float speed);
         
-        void DrawCar();
+        void DrawCar() const;
         
         void MoveCar(float difficulty_scalar, bool direction);
 

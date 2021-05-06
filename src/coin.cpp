@@ -19,7 +19,7 @@ namespace frogger {
                        ci::Rand::randFloat(margin_, max_y_ - margin_));
     }
 
-    void Coin::DrawCoin() {
+    void Coin::DrawCoin() const{
       ci::gl::color(kColor);
       ci::gl::drawSolidEllipse(position_, kXRadius, kYRadius);
       ci::gl::color(ci::Color("black"));

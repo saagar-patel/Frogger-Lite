@@ -25,6 +25,8 @@ class Level {
     
     void MovePlayer();
 
+    void ResetPlayerPosition();
+
     int GetScore() const;
 
     unsigned int GetLevelCount() const;
@@ -128,8 +130,6 @@ class Level {
     void ComputeCurrentTime();
 
     void DecreaseLives();
-    
-    void ResetPlayerPosition();
     
     void PopulateRoads();
     

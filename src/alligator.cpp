@@ -7,7 +7,7 @@ namespace frogger {
       move_speed_ = speed;
     }
 
-    void Alligator::DrawGator() {
+    void Alligator::DrawGator() const{
       ci::gl::color(kColor);
       ci::gl::drawSolidRect(ci::Rectf(top_left_edge_, bot_right_edge_));
     }

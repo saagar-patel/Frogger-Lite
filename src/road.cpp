@@ -7,12 +7,12 @@ namespace frogger {
     
 using glm::vec2;  
 
-Road::Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool direction) {
+Road::Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float max_speed, bool left_to_right) {
     spawnpoints_ = std::move(spawnpoints);
     num_cars_ = num_cars;
     min_speed_ = min_speed;
     max_speed_ = max_speed;
-    left_to_right_movement_ = direction;
+    left_to_right_movement_ = left_to_right;
     road_width_ = spawnpoints_[1].x - spawnpoints_[0].x;
     CreateCarObstacles();
 }

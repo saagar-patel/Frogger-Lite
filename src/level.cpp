@@ -22,17 +22,17 @@ Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)
 void Level::Display() const {
   DrawLevelObjective(kLevelObjective);
   player_.DrawPlayer();
-  for (Road road : car_roads_) {
-    for (Car &car : road.GetCars()) {
+  for (Road road : car_roads_) { // const ref
+    for (const Car &car : road.GetCars()) { // const ref
       car.DrawCar();
     }
   }
-  for (const Stream& stream : gator_streams_) {
-    for (Alligator gator : stream.gators_) {
+  for (Stream stream : gator_streams_) {
+    for (const Alligator& gator : stream.GetGators()) { //const ref
       gator.DrawGator();
     }
   }
-  for (Coin coin : coins_) {
+  for (const Coin& coin : coins_) { //const ref
     if(!coin.IsCollected()) {
       coin.DrawCoin();
     }
@@ -71,7 +71,7 @@ void Level::AdvanceOneFrame() {
     }
   }
   for (auto & gator_stream : gator_streams_) {
-    for (auto & gator : gator_stream.gators_) {
+    for (auto & gator : gator_stream.GetGators()) {
       gator.MoveGator(kBaseDifficultyScalar +
                                         ((static_cast<float>(score_)/kDifficultyDenominator)
                                         * static_cast<float>(level_count_)/2),
@@ -147,7 +147,7 @@ void Level::ExecuteCarCollision() {
 
 void Level::ExecuteGatorCollision() {
   for (auto & gator_stream : gator_streams_) {
-    for (auto & gator : gator_stream.gators_) {
+    for (auto & gator : gator_stream.GetGators()) {
       if (player_.GetPosition().x - player_.GetRadius() <= gator.GetBotRightEdge().x &&
           player_.GetPosition().x + player_.GetRadius() >= gator.GetTopLeftEdge().x &&
           player_.GetPosition().y + player_.GetRadius() >= gator.GetTopLeftEdge().y &&
@@ -189,6 +189,7 @@ void Level::ExecuteLevelCompletion() {
     player_.SetLives(3);
     ResetPlayerPosition();
     level_count_++;
+    //scales inversely and is multiplied to give a score in the hundreds
     score_ += static_cast<int>(100 * (1/(0.1 * ComputeElapsedTime())));
     UpdateRoadDirections();
     UpdateStreamSettings();

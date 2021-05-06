@@ -1,4 +1,2 @@
-//
-// Created by Saagar on 4/20/2021.
-//
-
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch.hpp>

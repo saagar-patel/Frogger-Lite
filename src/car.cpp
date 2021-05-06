@@ -12,7 +12,7 @@ Car::Car(const vec2& spawnpoint, float speed) {
   color_ = ci::Color(kPossibleColors[ci::Rand::randUint(8)]);
 }
 
-void Car::DrawCar() {
+void Car::DrawCar() const{
   ci::gl::color(color_);
   ci::gl::drawSolidRect(ci::Rectf(top_left_edge_, bot_right_edge_));
 }

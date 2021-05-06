@@ -38,10 +38,11 @@ namespace frogger {
 
         const std::vector<vec2> &GetSpawnpoints() const;
 
-        std::vector<Alligator> gators_;
-        
-      private:
+        std::vector<Alligator> &GetGators();
+
+    private:
         int kNumGators = 2;
+        std::vector<Alligator> gators_;
         float player_move_speed_;
         bool left_to_right_;
         bool stream_left_right_;
