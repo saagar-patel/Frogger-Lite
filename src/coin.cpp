@@ -8,6 +8,8 @@ namespace frogger {
       max_x_ = max_x_size;
       max_y_ = max_y_size;
       margin_ = margin;
+      
+      //uses the max values and margin to randomly assign initial position of the coin
       position_ = vec2(ci::Rand::randFloat(0, max_x_ - margin_),
                        ci::Rand::randFloat(margin_, max_y_ - margin_));
       value_ = value;
@@ -24,11 +26,13 @@ namespace frogger {
       ci::gl::drawSolidEllipse(position_, kXRadius, kYRadius);
       ci::gl::color(ci::Color("black"));
       ci::gl::drawStrokedEllipse(position_, kXRadius, kYRadius);
+      //draws the little slit in the coin to make it look more like a coin
       ci::gl::drawSolidRect(ci::Rectf(vec2(position_.x - 5, position_.y + 15),
                                       vec2(position_.x + 5, position_.y - 15)));
     }
 
     bool Coin::CheckCoinCollision(const Player& player) {
+      //if the centers of the coin and player are closer than the sum of the radius then they have collided
       if(distance(player.GetPosition(), position_) < player.GetRadius() + kXRadius) {
         return true;
       }

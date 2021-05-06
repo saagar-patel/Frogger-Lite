@@ -13,38 +13,106 @@ namespace frogger {
 
 class Level {
   public:
+    /**
+     * Constructor for the level object, takes no params
+     */
     explicit Level();
     
+    /**
+     * Display method used by frogger_app
+     * Handles drawing player, cars, alligators, coins, level objective, borders
+     */
     void Display() const;
     
+    /**
+     * AdvanceOneFrame method used by frogger_app handles all visual updates and serves as makeshift game loop
+     * Handles car movement, player movement, alligator movement, collision, level updates
+     */
     void AdvanceOneFrame();
     
+    /**
+     * Creates the player object that exists in the level
+     * @param position the position to start the player
+     * @param lives num lives for player
+     * @param radius the radius of the player piece
+     * @return a player object
+     */
     static Player CreatePlayer(const vec2& position, int lives, float radius);
     
+    /**
+     * Getter for Player object in Level
+     * @return an object of type Player representing the current playable object
+     */
     Player GetPlayer();
     
+    /**
+     * Handles WASD movement of the player object
+     */
     void MovePlayer();
 
+    /**
+     * Resets the position of the player to the spawnpoint
+     */
     void ResetPlayerPosition();
 
+    /**
+     * Getter for the current score of the game
+     * @return an int representing the score
+     */
     int GetScore() const;
 
+    /**
+     * Getter for the current level
+     * @return unsigned representing the level
+     */
     unsigned int GetLevelCount() const;
 
+    /**
+     * Sets the boolean representing if the player is in the state of moving up or not
+     * @param isMovingUp true = moving up, false = not moving up
+     */
     void SetIsMovingUp(bool isMovingUp);
 
+    /**
+     * Sets the boolean representing if the player is in the state of moving down or not
+     * @param isMovingDown true = moving down, false = not moving down
+     */
     void SetIsMovingDown(bool isMovingDown);
 
+    /**
+     * Sets the boolean representing if the player is in the state of moving right not
+     * @param isMovingDown true = moving right, false = not moving right
+     */
     void SetIsMovingRight(bool isMovingRight);
 
+    /**
+     * Sets the boolean representing if the player is in the state of moving down or not
+     * @param isMovingDown true = moving left, false = not moving left
+     */
     void SetIsMovingLeft(bool isMovingLeft);
 
+    /**
+     * Getter for the boolean representing the state of if the player can move at all or not
+     * @return boolean, true = can move, false = cannot move
+     */
     bool IsCanMove() const;
 
+    /**
+     * Getter for the boolean representing the state of if the game is over or not
+     * @return boolean, true == game over, false = game not over
+     */
     bool IsGameOver() const;
 
+    /**
+     * Setter for the boolean representing if the player can move
+     * @param canMove true = makes player movable, false = makes the player immobile
+     */
     void SetCanMove(bool canMove);
 
+    /**
+     * Returns the current time elapsed on the level
+     * @return a double representing the time since the level started
+     */
     double GetCurrentTimeCount() const;
 
   private:
@@ -115,32 +183,80 @@ class Level {
     std::vector<Coin> coins_; //stores all coins on level
     Player player_;
     
+    /**
+     * Checks if the player object collides with the wall
+     * Changes state of the level accordingly to collision 
+     */
     void ExecuteWallCollision();
     
+    /**
+     * Checks if the player collides with the level objective
+     * Changes state of the level and player accordingly to collision
+     */
     void ExecuteLevelCompletion();
     
+    /**
+     * Checks if the players collides with a car
+     * Changes the state of the level and player as well depending on collision
+     */
     void ExecuteCarCollision();
     
+    /**
+     * Checks if the players collides with a Alligator
+     * Changes the state of the level and player as well depending on collision
+     */
     void ExecuteGatorCollision();
     
+    /**
+     * Draws level objective using cinder::gl::drawSolidCircle
+     * @param level_goal the position at which to place the level objective
+     */
     void DrawLevelObjective(const vec2& level_goal) const;
     
+    /**
+     * Compute Elapsed Time for each level
+     * @return a double representing time spent on the level, used in score calculation
+     */
     double ComputeElapsedTime();
     
+    /**
+     * Computes the current time, used to modify current_time_
+     */
     void ComputeCurrentTime();
 
+    /**
+     * Decreases the life count by 1
+     */
     void DecreaseLives();
     
+    /**
+     * Places cars on road according to level specifications and road specifications
+     */
     void PopulateRoads();
     
+    /**
+     * Places alligators in stream according to level and stream specifications
+     */
     void PopulateStreams();
     
+    /**
+     * Creates coins and adds them to the member list containing all coins belonging to the level
+     */
     void CreateCoins();
     
+    /**
+     * Updates the direction that cars go on each road randomly
+     */
     void UpdateRoadDirections();
     
+    /**
+     * Updates the direction that alligators go as well as the direction of the current in each stream randomly
+     */
     void UpdateStreamSettings();
     
+    /**
+     * Moves the player object according to the stream current of the stream it is in
+     */
     void MovePlayerInStream();
 };
 

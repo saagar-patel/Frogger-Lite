@@ -6,13 +6,14 @@
 
 namespace frogger {
 
-Stream::Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed, bool direction, float top_bound, float bot_bound, float player_move_speed) {
+Stream::Stream(std::vector<vec2> spawnpoints, float min_speed, float max_speed, bool left_to_right, float top_bound,
+               float bot_bound, float player_move_speed) {
     spawnpoints_ = std::move(spawnpoints);
     max_speed_ = max_speed;
     min_speed_ = min_speed;
     stream_width = spawnpoints_[1].x - spawnpoints_[0].x;
-    left_to_right_ = direction;
-    stream_left_right_ = !direction;
+    left_to_right_ = left_to_right;
+    stream_left_right_ = !left_to_right; //stream direction is always opposite of alligator direction
     top_bound_ = top_bound;
     bot_bound_ = bot_bound;
     player_move_speed_ = player_move_speed;
@@ -25,7 +26,7 @@ bool Stream::IsLeftToRight() const {
 
 bool Stream::IsGatorReachedEnd(const frogger::Alligator &gator) const {
   if (left_to_right_) {
-    if (gator.GetTopLeftEdge().x >= reset_point.x) {
+    if (gator.GetTopLeftEdge().x >= reset_point.x) { //if alligator is entirely past reset point
       return true;
     }
   } else {
@@ -37,7 +38,9 @@ bool Stream::IsGatorReachedEnd(const frogger::Alligator &gator) const {
 }
 
 bool Stream::isPlayerInStream(const Player &player) const {
-  if (player.GetPosition().y + player.GetRadius()>= top_bound_ && player.GetPosition().y + player.GetRadius()<= bot_bound_) {
+  //if player is between bounds
+  if (player.GetPosition().y + player.GetRadius()>= top_bound_ &&
+  player.GetPosition().y + player.GetRadius()<= bot_bound_) {
     return true;
   }
   return false;
@@ -70,10 +73,12 @@ void Stream::CreateGatorObstacles() {
     reset_point = spawnpoints_[0];
   }
   for (int i = 0; i < kNumGators; ++i) {
-    if (left_to_right_) {
-      gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x + ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
+    if (left_to_right_) { //adds alligator objects to gators_ according to stream members
+      gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x 
+      + ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
     } else {
-      gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x - ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
+      gators_.emplace_back(Alligator(vec2(current_spawnpoint_.x
+      - ((stream_width/static_cast<float>(kNumGators)) * static_cast<float>(i)), current_spawnpoint_.y), speed));
     }
   }
 }

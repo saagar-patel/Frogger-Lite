@@ -18,8 +18,8 @@ Road::Road(std::vector<vec2> spawnpoints, int num_cars, float min_speed, float m
 }
 
 void Road::CreateCarObstacles() {
-  float speed = ci::Rand::randFloat(min_speed_, max_speed_ + 1);
-  if (left_to_right_movement_) {
+  float speed = ci::Rand::randFloat(min_speed_, max_speed_ + 1); //randomizes speed
+  if (left_to_right_movement_) { //assigns spawnpoints according to movement direction
     current_spawnpoint_ = spawnpoints_[0];
     destruction_point_ = spawnpoints_[1];
   } else {
@@ -27,7 +27,7 @@ void Road::CreateCarObstacles() {
     destruction_point_ = spawnpoints_[0];
   }
   for (int i = 1; i < num_cars_ + 1; ++i) {
-    if (left_to_right_movement_) {
+    if (left_to_right_movement_) { //distributes cars evenly across road according to num_cars and road width
       cars_.emplace_back(Car(vec2(current_spawnpoint_.x + ((road_width_/static_cast<float>(num_cars_)) 
       * static_cast<float>(i)), current_spawnpoint_.y),speed));
     } else {
@@ -43,7 +43,7 @@ const vec2 &Road::GetCurrentSpawnpoint() const {
 
 bool Road::IsCarReachedEnd(const Car& car) const {
   if (left_to_right_movement_) {
-    if (car.GetTopLeftEdge().x >= destruction_point_.x) {
+    if (car.GetTopLeftEdge().x >= destruction_point_.x) { //if back of car is past destruction point then trigger
       return true;
     }
   } else if (!left_to_right_movement_) {

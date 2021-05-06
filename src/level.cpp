@@ -22,21 +22,29 @@ Level::Level() : player_(CreatePlayer(kPlayerSpawnPoint, kLives, kDefaultRadius)
 void Level::Display() const {
   DrawLevelObjective(kLevelObjective);
   player_.DrawPlayer();
-  for (Road road : car_roads_) { // const ref
-    for (const Car &car : road.GetCars()) { // const ref
+  
+  //draws all cars
+  for (Road road : car_roads_) {
+    for (const Car &car : road.GetCars()) {
       car.DrawCar();
     }
   }
+  
+  //draws all alligators
   for (Stream stream : gator_streams_) {
-    for (const Alligator& gator : stream.GetGators()) { //const ref
+    for (const Alligator& gator : stream.GetGators()) {
       gator.DrawGator();
     }
   }
-  for (const Coin& coin : coins_) { //const ref
+  
+  //draws all coins
+  for (const Coin& coin : coins_) {
     if(!coin.IsCollected()) {
       coin.DrawCoin();
     }
   }
+  
+  //draws enable movement overlay if player is reset
   if (!can_move_ && !game_over_) {
     ci::gl::drawStringCentered("Press Spacebar to enable movement.",
                                vec2(1200, 450),
@@ -52,6 +60,8 @@ void Level::AdvanceOneFrame() {
   ExecuteLevelCompletion();
   ExecuteCarCollision();
   ExecuteGatorCollision();
+  
+  //handles coin collection
   for (Coin &coin : coins_) {
     if (!coin.IsCollected()) {
       if (coin.CheckCoinCollision(player_)) {
@@ -60,6 +70,8 @@ void Level::AdvanceOneFrame() {
       }
     }
   }
+  
+  //moves all cars
   for (auto & car_road : car_roads_) {
     for (auto & car : car_road.GetCars()) {
       car.MoveCar(kBaseDifficultyScalar +
@@ -70,6 +82,8 @@ void Level::AdvanceOneFrame() {
       }
     }
   }
+  
+  //moves all alligators
   for (auto & gator_stream : gator_streams_) {
     for (auto & gator : gator_stream.GetGators()) {
       gator.MoveGator(kBaseDifficultyScalar +
@@ -108,7 +122,7 @@ void Level::MovePlayerInStream() {
   for (auto & gator_stream : gator_streams_) {
     if (gator_stream.isPlayerInStream(player_)) {
       float difficulty_scalar = kBaseDiffScalarStream + ((static_cast<float>(score_)/kDifficultDenomStream)
-                                * static_cast<float>(level_count_)/2);
+                                * static_cast<float>(level_count_)/2); //formula to calculate the difficulty
       if (gator_stream.IsStreamLeftRight()) {
         player_.SetPosition(vec2(player_.GetPosition().x
                                  + (difficulty_scalar * gator_stream.GetPlayerMoveSpeed()), player_.GetPosition().y));
@@ -121,12 +135,13 @@ void Level::MovePlayerInStream() {
 }
 
 void Level::ExecuteWallCollision() {
+  //handles collision with left, right, bottom wall
   if (player_.GetPosition().x + player_.GetRadius() >= kRightWall ||
   player_.GetPosition().x - player_.GetRadius() <= kLeftWall ||
   player_.GetPosition().y + player_.GetRadius() >= kBottomWall ) {
     ResetPlayerPosition();
     DecreaseLives();
-  } else if (player_.GetPosition().y - player_.GetRadius() <= kTopWall){
+  } else if (player_.GetPosition().y - player_.GetRadius() <= kTopWall){ //player can't collide with top wall
     player_.SetPosition(vec2(player_.GetPosition().x, kTopWall + player_.GetRadius()));
   }
 }
@@ -160,7 +175,7 @@ void Level::ExecuteGatorCollision() {
 }
 
 void Level::ResetPlayerPosition() {
-  if (player_.GetLives() < 1) {
+  if (player_.GetLives() < 1) { //if the number of lives available go below 1 then game over
     game_over_ = true;
   }
   player_.SetPosition(kPlayerSpawnPoint);
@@ -191,9 +206,9 @@ void Level::ExecuteLevelCompletion() {
     level_count_++;
     //scales inversely and is multiplied to give a score in the hundreds
     score_ += static_cast<int>(100 * (1/(0.1 * ComputeElapsedTime())));
-    UpdateRoadDirections();
-    UpdateStreamSettings();
-    for (Coin &coin :coins_) {
+    UpdateRoadDirections(); //randomizes road direction every level
+    UpdateStreamSettings(); //randomizes stream direction every level
+    for (Coin &coin :coins_) { //resets coin position upon level completion
       coin.SetIsCollected(false);
       coin.SetToRandomPosition();
     }
@@ -247,7 +262,7 @@ void Level::UpdateRoadDirections() {
   for (auto & car_road : car_roads_) {
     bool left_to_right_direction = ci::Rand::randBool();
     car_road.SetLeftToRightMovement(left_to_right_direction);
-    if (left_to_right_direction) {
+    if (left_to_right_direction) { //updates spawnpoints and reset point
       car_road.SetCurrentSpawnpoint(car_road.GetSpawnpoints()[0]);
       car_road.SetDestructionPoint(car_road.GetSpawnpoints()[1]);
     } else {
@@ -260,8 +275,8 @@ void Level::UpdateRoadDirections() {
 void Level::UpdateStreamSettings() {
   for (auto & gator_stream : gator_streams_) {
     bool left_to_right_direction = ci::Rand::randBool();
-    gator_stream.SetLeftToRight(left_to_right_direction);
-    gator_stream.SetStreamLeftRight(!left_to_right_direction);
+    gator_stream.SetLeftToRight(left_to_right_direction); //sets alligator direction
+    gator_stream.SetStreamLeftRight(!left_to_right_direction); //sets stream direction opposite of alligator direction
     float new_speed = ci::Rand::randFloat(kMinStreamSpeed, kMaxStreamSpeed);
     gator_stream.SetPlayerMoveSpeed(new_speed);
     if (left_to_right_direction) {

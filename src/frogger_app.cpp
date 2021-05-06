@@ -34,24 +34,28 @@ void FroggerApp::draw() {
   ci::gl::color(ci::Color("lightskyblue"));
   ci::gl::drawSolidRect(ci::Rectf(vec2(0, 854), vec2(kWindowSizeX, 856)));
   
+  //Draws the level tracker
   ci::gl::drawStringCentered(
           "Level: " + std::to_string(level_.GetLevelCount()),
           glm::vec2((kWindowSizeX / 10) * 2.8, kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
+  //Draws the score tracker
   ci::gl::drawStringCentered(
           "Score: " + std::to_string(level_.GetScore()),
           glm::vec2(kWindowSizeX / 10, kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
+  //Draws the lives tracker
   ci::gl::drawStringCentered(
           "Lives Left: " + std::to_string(level_.GetPlayer().GetLives()),
           glm::vec2(8 * (kWindowSizeX / 10), kTopMargin/4),
           ci::Color("black"),
           ci::Font("Consolas", 100));
 
+  //Draws the time taken during the level tracker
   ci::gl::drawStringCentered(
           "Time: " + std::to_string(level_.GetCurrentTimeCount()),
           vec2(5.2 * (kWindowSizeX / 10.0), kTopMargin/4),
@@ -92,6 +96,7 @@ void FroggerApp::keyDown(ci::app::KeyEvent event) {
   if (event.getCode() == ci::app::KeyEvent::KEY_SPACE) {
     level_.SetCanMove(true);
   }
+  //standard WASD movement handling
   if (level_.IsCanMove() && !level_.IsGameOver()) {
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_w:

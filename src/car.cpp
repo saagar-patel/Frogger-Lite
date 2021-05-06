@@ -22,6 +22,7 @@ void Car::MoveCar(float difficulty_scalar, bool left_to_right) {
     top_left_edge_.x += difficulty_scalar * move_speed_;
     bot_right_edge_.x += difficulty_scalar * move_speed_;
   } else {
+    //multiplies by 1.0f to flip the direction according to left_to_right
     top_left_edge_.x += (-1.0f * difficulty_scalar * move_speed_);
     bot_right_edge_.x += (-1.0f * difficulty_scalar * move_speed_);
   }
